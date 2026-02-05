@@ -1,4 +1,4 @@
-from .utils import Wall, Direction
+from mazegen.utils.utils import Wall, Direction
 
 
 __all__ = ["Wall", "Direction"]
