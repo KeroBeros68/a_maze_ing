@@ -77,6 +77,8 @@ lint:
 	python3 -m mypy --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs --exclude=matrix_env $(SRC)
 
 lint-strict:
+	python3 -m flake8 --exclude=matrix_env
+	python3 -m mypy --strict --exclude=matrix_env $(SRC)
 
 clean:
 	printf "$(CYAN)Suppression de __pycache__...$(RESET) "

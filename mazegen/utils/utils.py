@@ -15,11 +15,11 @@ class Direction(Enum):
     WEST = Wall.WEST
 
     @property
-    def wall(self):
+    def wall(self) -> Wall:
         return self.value
 
     @property
-    def opposite(self):
+    def opposite(self) -> "Direction":
         return {
             Direction.NORTH: Direction.SOUTH,
             Direction.SOUTH: Direction.NORTH,
