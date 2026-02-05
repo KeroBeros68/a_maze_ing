@@ -4,7 +4,7 @@ from mazegen.utils.utils import Wall
 class Cell:
     def __init__(self, x: int, y: int) -> None:
         self.__wall: int = 0xF
-        self.__visited: bool = False
+        self.visited: bool = False
         self.__x: int = x
         self.__y: int = y
 
@@ -12,14 +12,19 @@ class Cell:
         self.__wall &= ~wall
 
     def visit(self, is_visited: bool) -> None:
-        self.__visited = is_visited
+        self.visited = is_visited
 
     def __str__(self) -> str:
         return (
             f"Cellule: {self.__wall:2}  {self.__wall:04b}  {self.__wall:X}"
-            f" is visited: {self.__visited} "
+            f" is visited: {self.visited} "
             f"position in maze: {self.__x}, {self.__y}"
         )
+
+    def view_cell(self) -> str:
+        wall_hex = f"{self.__wall:X}"
+
+        return f"{wall_hex}"
 
 
 if __name__ == "__main__":

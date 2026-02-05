@@ -14,6 +14,7 @@ Dependencies:
 
 from typing import Dict
 import env_check
+from mazegen.MazeGenerator import MazeGenerator
 from model import ConfigModel
 import sys
 
@@ -47,4 +48,13 @@ except ValidationError as e:
         print(f"Type: {error['type']}\n")
     sys.exit(1)
 
-print(config.ENTRY)
+print(config)
+print()
+
+maze_generator = MazeGenerator(config)
+
+maze = maze_generator.generate_maze()
+
+print("\33[1m")
+print(maze)
+print("\33[0m")
