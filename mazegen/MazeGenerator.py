@@ -5,12 +5,13 @@ the backtracking algorithm with a given configuration.
 """
 
 import random
+from sys import stderr
 from mazegen.algorithms.backtracking import backtrack
 from mazegen.maze.maze import Maze
 from mazegen.utils.model import ConfigModel
 
 
-class MazeGenerator():
+class MazeGenerator:
     """Generate a maze using the backtracking algorithm.
 
     This class orchestrates the maze generation process by:
@@ -45,8 +46,9 @@ class MazeGenerator():
         self.__exit = config.EXIT
         self.__output_file = config.OUTPUT_FILE
         self.__seed = config.SEED
-        self.maze: Maze = Maze(self.__width, self.__height, self.__entry,
-                               self.__exit)
+        self.maze: Maze = Maze(
+            self.__width, self.__height, self.__entry, self.__exit
+        )
 
     def generate_maze(self) -> Maze:
         """Generate a maze using the backtracking algorithm.
@@ -87,5 +89,5 @@ class MazeGenerator():
                 file.write("\n\n")
                 file.write(f"{x},{y}\n")
                 file.write(f"{x1},{y1}")
-        except Exception as e:
-            print(e)
+        except (FileNotFoundError, PermissionError) as e:
+            stderr.write(e)

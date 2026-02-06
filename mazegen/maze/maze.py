@@ -95,7 +95,7 @@ class Maze:
             for x, cell in enumerate(row):
                 cell_view = cell.view_cell()
                 row_str.append(cell_view)
-            result.append(" ".join(row_str))
+            result.append("".join(row_str))
         return "\n".join(result)
 
     # def __str__(self) -> str:
