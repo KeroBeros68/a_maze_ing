@@ -82,27 +82,18 @@ class Maze:
         """Return a text-based visualization of the maze.
 
         Displays the maze grid with hexadecimal representation of cell walls.
-        Entry point is shown in blue, exit point in orange.
+        Each cell's wall state is shown as a single hexadecimal digit.
 
         Returns:
-            str: Multi-line string representing the maze with colored
-            entry/exit
+            str: Multi-line string representing the maze grid, with cells
+                 separated by spaces and rows separated by newlines
         """
-        BLUE = "\033[94m"
-        ORANGE = "\033[93m"
-        RESET = "\033[39m"
 
         result = []
         for y, row in enumerate(self.maze_grid):
             row_str = []
             for x, cell in enumerate(row):
                 cell_view = cell.view_cell()
-
-                if (x, y) == self.entry:
-                    cell_view = f"{BLUE}{cell.view_cell()}{RESET}"
-                elif (x, y) == self.exit:
-                    cell_view = f"{ORANGE}{cell.view_cell()}{RESET}"
-
                 row_str.append(cell_view)
             result.append(" ".join(row_str))
         return "\n".join(result)

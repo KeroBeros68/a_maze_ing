@@ -43,6 +43,7 @@ class MazeGenerator():
         self.__height = config.HEIGHT
         self.__entry = config.ENTRY
         self.__exit = config.EXIT
+        self.__output_file = config.OUTPUT_FILE
         self.__seed = config.SEED
         self.maze: Maze = Maze(self.__width, self.__height, self.__entry,
                                self.__exit)
@@ -63,3 +64,28 @@ class MazeGenerator():
         x, y = self.__entry
         self.maze = backtrack(self.maze, x, y)
         return self.maze
+
+    def create_output_file(self) -> None:
+        """Write the generated maze to an output file.
+
+        Saves the maze visualization to a text file along with entry and exit
+        coordinates in CSV format (x,y). Creates or overwrites the output file
+        specified in the configuration.
+
+        Returns:
+            None
+
+        Raises:
+            IOError: If the file cannot be written
+            (caught and printed as error)
+        """
+        x, y = self.__entry
+        x1, y1 = self.__exit
+        try:
+            with open(self.__output_file, "w") as file:
+                file.write(self.maze.__str__())
+                file.write("\n\n")
+                file.write(f"{x},{y}\n")
+                file.write(f"{x1},{y1}")
+        except Exception as e:
+            print(e)

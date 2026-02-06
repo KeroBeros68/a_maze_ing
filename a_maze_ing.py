@@ -60,3 +60,4 @@ print(maze)
 print("\33[0m")
 
 print("\nSEED =", config.SEED)
+maze_generator.create_output_file()
