@@ -74,6 +74,7 @@ run:
 	python3 a_maze_ing.py
 
 debug:
+	python3 -m pdb a_maze_ing.py
 
 lint:
 	python3 -m flake8 --exclude=matrix_env
