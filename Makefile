@@ -88,5 +88,12 @@ clean:
 	else \
 		echo "$(YELLOW)⚠ Rien à nettoyer$(RESET)"; \
 	fi
+	printf "$(CYAN)Suppression de .mypy_cache...$(RESET) "
+	if [ -d ".mypy_cache" ]; then \
+		rm -rf .mypy_cache && \
+		echo "$(GREEN)✓ Dossier .mypy_cache supprimés$(RESET)"; \
+	else \
+		echo "$(YELLOW)⚠ Rien à nettoyer$(RESET)"; \
+	fi
 
 .PHONY: install clean 

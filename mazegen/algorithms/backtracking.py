@@ -10,15 +10,13 @@ def backtrack(maze: Maze, x: int, y: int) -> Maze:
     while stack:
         x1, y1 = stack[len(stack) - 1]
         maze.maze_grid[y1][x1].visit(True)
-        print(x1, y1)
         try:
             target = valid_target(x1, y1, maze)
             x2, y2 = target
             maze = remove_wall(x1, y1, x2, y2, maze)
             x1, y1 = x2, y2
             stack.append((x1, y1))
-        except Exception as e:
-            print(e)
+        except Exception:
             stack.pop()
     return maze
 
@@ -58,5 +56,6 @@ if __name__ == "__main__":
     maze = Maze(10, 10, (5, 0), (9, 9))
     maze.init_grid()
     x, y = maze.entry
+    random.seed(42)
     maze = backtrack(maze, x, y)
     print(maze)

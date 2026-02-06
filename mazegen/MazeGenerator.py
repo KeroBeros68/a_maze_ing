@@ -1,3 +1,4 @@
+import random
 from mazegen.algorithms.backtracking import backtrack
 from mazegen.maze.maze import Maze
 from model import ConfigModel
@@ -9,12 +10,14 @@ class MazeGenerator():
         self.__height = config.HEIGHT
         self.__entry = config.ENTRY
         self.__exit = config.EXIT
+        self.__seed = config.SEED
         self.maze: Maze = None
 
     def generate_maze(self) -> Maze:
         self.maze = Maze(self.__width, self.__height, self.__entry,
                          self.__exit)
         self.maze.init_grid()
+        random.seed(self.__seed)
         # algo de generation
         x, y = self.__entry
         self.maze = backtrack(self.maze, x, y)

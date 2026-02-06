@@ -58,3 +58,5 @@ maze = maze_generator.generate_maze()
 print("\33[1m")
 print(maze)
 print("\33[0m")
+
+print("\nSEED =", config.SEED)
