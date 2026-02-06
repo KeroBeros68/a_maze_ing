@@ -14,8 +14,6 @@ Dependencies:
 
 from typing import Dict
 import env_check
-from mazegen.MazeGenerator import MazeGenerator
-from model import ConfigModel
 import sys
 
 
@@ -35,6 +33,8 @@ check_env = env_check.EnvCheck(module_list)
 check_env.check_process()
 
 from pydantic import ValidationError  # noqa: E402
+from model import ConfigModel  # noqa: E402
+from mazegen.MazeGenerator import MazeGenerator  # noqa: E402
 
 
 print("\n===== A_maze_ing =====\n")

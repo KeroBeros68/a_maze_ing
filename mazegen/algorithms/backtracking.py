@@ -4,8 +4,7 @@ from mazegen.maze.maze import Maze
 from mazegen.utils.utils import Direction, Wall
 
 
-def backtrack(maze: Maze, x: int, y: int, nb_cell: int,
-              nb_cell_max: int) -> Maze:
+def backtrack(maze: Maze, x: int, y: int) -> Maze:
     stack = [(x, y)]
 
     while stack:
@@ -54,9 +53,10 @@ def remove_wall(x, y, x1, y1, maze: Maze):
         maze.maze_grid[y1][x1].remove_wall(Direction.NORTH.opposite.wall)
     return maze
 
+
 if __name__ == "__main__":
-    maze = Maze(10, 10, (0, 0), (9, 9))
+    maze = Maze(10, 10, (5, 0), (9, 9))
     maze.init_grid()
     x, y = maze.entry
-    maze = backtrack(maze, x, y, 0, 10 * 10)
+    maze = backtrack(maze, x, y)
     print(maze)

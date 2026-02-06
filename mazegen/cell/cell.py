@@ -21,16 +21,17 @@ class Cell:
             f"position in maze: {self.__x}, {self.__y}"
         )
 
-    # def view_cell(self) -> str:
-    #     wall_hex = f"{self.__wall:X}"
-
-    #     return f"{wall_hex}"
     def view_cell(self) -> str:
-        return [
-            f"/ {'__' if self.__wall & 0b0001 else '  '} \\",
-            f"{'| ' if self.__wall & 0b1000 else "  "}  {' |' if self.__wall & 0b0010 else "  "}",
-            f"\\ {'__' if self.__wall & 0b0100 else '  '} /",
-        ]
+        wall_hex = f"{self.__wall:X}"
+
+        return f"{wall_hex}"
+    # def view_cell(self) -> str:
+    #     return [
+    #         f"/ {'==' if self.__wall & 0b0001 else '  '} \\",
+    #         f"{'| ' if self.__wall & 0b1000 else "  "}  {' |' if self.__wall
+    # & 0b0010 else "  "}",
+    #         f"\\ {'==' if self.__wall & 0b0100 else '  '} /",
+    #     ]
 
 
 if __name__ == "__main__":

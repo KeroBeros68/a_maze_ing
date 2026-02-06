@@ -1,3 +1,4 @@
+from mazegen.algorithms.backtracking import backtrack
 from mazegen.maze.maze import Maze
 from model import ConfigModel
 
@@ -15,4 +16,6 @@ class MazeGenerator():
                          self.__exit)
         self.maze.init_grid()
         # algo de generation
+        x, y = self.__entry
+        self.maze = backtrack(self.maze, x, y)
         return self.maze
