@@ -1,9 +1,32 @@
+"""Maze grid structure and visualization.
+
+This module defines the Maze class that represents the complete maze structure,
+including all cells, dimensions, and entry/exit points. It handles grid
+initialization and text-based visualization.
+"""
+
 from typing import Tuple
 from mazegen.utils.utils import Wall
 from mazegen.cell.cell import Cell
 
 
 class Maze:
+    """A maze grid consisting of cells with walls.
+
+    This class represents the entire maze structure, managing:
+    - A 2D grid of Cell objects
+    - Maze dimensions (width and height)
+    - Entry and exit point coordinates
+    - Text-based visualization with colored entry/exit points
+
+    Attributes:
+        maze_grid: 2D list of Cell objects representing the maze
+        __width: Width (number of columns) of the maze
+        __height: Height (number of rows) of the maze
+        entry: Tuple (x, y) for the entry point
+        exit: Tuple (x, y) for the exit point
+    """
+
     def __init__(
         self,
         width: int,
@@ -11,27 +34,60 @@ class Maze:
         entry: Tuple[int, int],
         exit: Tuple[int, int],
     ):
-        self.maze_grid: list[list[Wall]] = []
+        """Initialize a maze with given dimensions and entry/exit points.
+
+        Args:
+            width: Width of the maze (number of columns)
+            height: Height of the maze (number of rows)
+            entry: Tuple (x, y) specifying the entry point coordinates
+            exit: Tuple (x, y) specifying the exit point coordinates
+        """
+        self.maze_grid: list[list[Cell]] = []
         self.__width: int = width
         self.__height: int = height
         self.entry: Tuple[int, int] = entry
         self.exit: Tuple[int, int] = exit
 
     @property
-    def width(self):
+    def width(self) -> int:
+        """Get the width of the maze.
+
+        Returns:
+            int: Number of columns in the maze
+        """
         return self.__width
 
     @property
-    def height(self):
+    def height(self) -> int:
+        """Get the height of the maze.
+
+        Returns:
+            int: Number of rows in the maze
+        """
         return self.__height
 
-    def init_grid(self):
+    def init_grid(self) -> None:
+        """Initialize the maze grid with Cell objects.
+
+        Creates a 2D grid of Cell objects with dimensions matching
+        the maze width and height. Each cell is initialized with its
+        coordinates and all walls intact.
+        """
         self.maze_grid = [
             [Cell(x, y) for x in range(self.__width)]
             for y in range(self.__height)
         ]
 
     def __str__(self) -> str:
+        """Return a text-based visualization of the maze.
+
+        Displays the maze grid with hexadecimal representation of cell walls.
+        Entry point is shown in blue, exit point in orange.
+
+        Returns:
+            str: Multi-line string representing the maze with colored
+            entry/exit
+        """
         BLUE = "\033[94m"
         ORANGE = "\033[93m"
         RESET = "\033[39m"

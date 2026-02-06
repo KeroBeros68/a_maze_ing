@@ -1,3 +1,10 @@
+"""Backtracking maze generation algorithm.
+
+This module implements the depth-first search backtracking algorithm
+for generating perfect mazes. It carves passages by removing walls
+between adjacent unvisited cells.
+"""
+
 import random
 from typing import Tuple
 from mazegen.maze.maze import Maze
@@ -5,6 +12,20 @@ from mazegen.utils.utils import Direction, Wall
 
 
 def backtrack(maze: Maze, x: int, y: int) -> Maze:
+    """Generate a maze using the backtracking algorithm.
+
+    Uses depth-first search with a stack to carve passages through the maze.
+    Starting from entry coordinates, recursively visits unvisited neighbors
+    and removes walls between visited and current cells.
+
+    Args:
+        maze: Maze object to generate
+        x: Starting X coordinate
+        y: Starting Y coordinate
+
+    Returns:
+        Maze: The modified maze with passages carved by the algorithm
+    """
     stack = [(x, y)]
 
     while stack:
@@ -22,6 +43,23 @@ def backtrack(maze: Maze, x: int, y: int) -> Maze:
 
 
 def valid_target(x: int, y: int, maze: Maze) -> Tuple[int, int]:
+    """Find a random unvisited neighbor of the current cell.
+
+    Checks all four adjacent cells (North, South, East, West) and
+    returns a random choice from unvisited neighbors that are within
+    maze bounds.
+
+    Args:
+        x: Current cell X coordinate
+        y: Current cell Y coordinate
+        maze: Maze object containing grid and dimensions
+
+    Returns:
+        Tuple[int, int]: Coordinates (x, y) of a random valid target cell
+
+    Raises:
+        IndexError: If no valid targets are available (all neighbors visited)
+    """
     target = [
         (x + dx, y + dy)
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]
@@ -36,7 +74,23 @@ def valid_target(x: int, y: int, maze: Maze) -> Tuple[int, int]:
     return random.choice(valid_target)
 
 
-def remove_wall(x, y, x1, y1, maze: Maze):
+def remove_wall(x: int, y: int, x1: int, y1: int, maze: Maze) -> Maze:
+    """Remove walls between two adjacent cells to create a passage.
+
+    Determines the direction from current cell to target cell and removes
+    the corresponding wall from both cells. This creates a passage between
+    the two cells.
+
+    Args:
+        x: Current cell X coordinate
+        y: Current cell Y coordinate
+        x1: Target cell X coordinate
+        y1: Target cell Y coordinate
+        maze: Maze object containing the grid to modify
+
+    Returns:
+        Maze: The modified maze with walls removed
+    """
     if x + 1 == x1:
         maze.maze_grid[y][x].remove_wall(Wall.EAST)
         maze.maze_grid[y1][x1].remove_wall(Direction.EAST.opposite.wall)
