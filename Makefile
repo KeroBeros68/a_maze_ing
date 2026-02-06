@@ -18,9 +18,12 @@ RESET   = \033[0m
 
 SRC = a_maze_ing.py \
 	  env_check.py \
-	  model.py \
+	  mazegen/utils/model.py \
 	  mazegen/utils/utils.py \
-	  mazegen/cell/cell.py
+	  mazegen/cell/cell.py \
+	  mazegen/maze/maze.py \
+	  mazegen/MazeGenerator.py \
+	  mazegen/algorithms/backtracking.py
 
 # **************************************************************************** #
 #									Rules									   #

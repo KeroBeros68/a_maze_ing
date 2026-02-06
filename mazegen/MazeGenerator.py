@@ -7,7 +7,7 @@ the backtracking algorithm with a given configuration.
 import random
 from mazegen.algorithms.backtracking import backtrack
 from mazegen.maze.maze import Maze
-from model import ConfigModel
+from mazegen.utils.model import ConfigModel
 
 
 class MazeGenerator():
@@ -44,7 +44,8 @@ class MazeGenerator():
         self.__entry = config.ENTRY
         self.__exit = config.EXIT
         self.__seed = config.SEED
-        self.maze: Maze = None
+        self.maze: Maze = Maze(self.__width, self.__height, self.__entry,
+                               self.__exit)
 
     def generate_maze(self) -> Maze:
         """Generate a maze using the backtracking algorithm.
@@ -56,8 +57,6 @@ class MazeGenerator():
             Maze: The generated maze object with walls removed according
                   to the backtracking algorithm
         """
-        self.maze = Maze(self.__width, self.__height, self.__entry,
-                         self.__exit)
         self.maze.init_grid()
         random.seed(self.__seed)
         # Maze generation algorithm
