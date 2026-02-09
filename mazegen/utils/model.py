@@ -9,6 +9,7 @@ The model ensures:
 - Valid entry and exit coordinates within bounds
 - Entry and exit are different points
 - Output file name is valid
+- Algorithm name is valid
 
 Classes:
     ConfigModel: Pydantic BaseSettings model for maze configuration
@@ -28,6 +29,8 @@ class ConfigModel(BaseSettings):
     OUTPUT_FILE: str = Field(..., min_length=4, max_length=15,
                              description="Output file name")
     PERFECT: bool = Field(default=False, description="Generate a perfect maze")
+    ALGORITHM: str = Field(default="backtracking",
+                           description="Maze generation algorithm to use")
     SEED: Optional[str] = Field(default_factory=lambda:
                                 ConfigModel._generate_seed(),
                                 min_length=0, max_length=100,

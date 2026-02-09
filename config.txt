@@ -10,3 +10,7 @@ EXIT=[2, 5]
 OUTPUT_FILE=maze.txt
 # Is the maze perfect?
 PERFECT=true
+# Maze generation algorithm (backtracking, etc.)
+ALGORITHM=backtracking
+# Seed
+SEED=4224522

@@ -53,7 +53,11 @@ print()
 
 maze_generator = MazeGenerator(config)
 
-maze = maze_generator.generate_maze()
+try:
+    maze = maze_generator.generate_maze()
+except Exception as e:
+    print(e)
+    sys.exit(1)
 
 print("\33[1m")
 print(maze)
