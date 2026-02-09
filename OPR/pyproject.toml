@@ -1,0 +1,19 @@
+[project]
+name = "a-maze-ing"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Kevin Bertrand",email = "kebertra@k1r2p7.42mulhouse.fr"}
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic (>=2.12.5,<3.0.0)",
+    "pydantic-settings (>=2.12.0,<3.0.0)",
+    "flake8 (>=7.3.0,<8.0.0)",
+    "mypy (>=1.19.1,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,15 @@
+# Maze width (number of cells)
+WIDTH=48
+# Maze height
+HEIGHT=20
+# Entry coordinates (x,y)
+ENTRY=[0, 0]
+# Exit coordinates (x,y)
+EXIT=[24, 18]
+# Output filename
+OUTPUT_FILE=maze.txt
+# Is the maze perfect?
+PERFECT=true
+# How to visualize?
+# 1: raw, 2: terminal display, 3: terminal animation
+VIEW=3
