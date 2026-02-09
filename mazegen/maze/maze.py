@@ -98,23 +98,6 @@ class Maze:
             result.append("".join(row_str))
         return "\n".join(result)
 
-    # def __str__(self) -> str:
-    #     BLUE = "\033[94m"
-    #     ORANGE = "\033[93m"
-    #     RESET = "\033[39m"
-
-    #     result = []
-    #     for y, row in enumerate(self.maze_grid):
-    #         row_str = ["", "", ""]
-    #         for x, cell in enumerate(row):
-    #             cell_view = cell.view_cell()
-    #             for i in range(3):
-    #                 row_str[i] += cell_view[i]
-    #         for ra in row_str:
-    #             print(ra)
-    #         # print("\n-----------------------------------")
-    #     return ""
-
 
 if __name__ == "__main__":
     maze = Maze(10, 10, (0, 0), (1, 1))

@@ -57,7 +57,7 @@ class EnvCheck():
                 if not self.check_dependencies():
                     sys.exit(1)
         except Exception as e:
-            print(f"Error: {e}")
+            sys.stderr.write(f"Error: {e}")
 
     @staticmethod
     def virtual_process(virtual_env: str | None) -> None:
@@ -91,8 +91,10 @@ class EnvCheck():
 
         print("Package installation path:")
         if virtual_env:
-            for s in site.getsitepackages([virtual_env]):
-                print(s)
+            site_packages_path: str = os.path.join(
+                virtual_env, "lib", "python3.13", "site-packages"
+            )
+            print(site_packages_path)
         else:
             for s in site.getsitepackages():
                 print(s)

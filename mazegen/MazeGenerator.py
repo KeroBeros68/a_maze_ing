@@ -76,7 +76,7 @@ class MazeGenerator:
         try:
             algorithm = AlgorithmFactory.create(self.__algorithm_name)
         except ValueError as e:
-            print(f"Error: {e}", file=stderr)
+            stderr.write(f"Error: {e}\n")
             raise
 
         x, y = self.__entry
@@ -106,4 +106,4 @@ class MazeGenerator:
                 file.write(f"{x},{y}\n")
                 file.write(f"{x1},{y1}")
         except (FileNotFoundError, PermissionError) as e:
-            stderr.write(e)
+            stderr.write(f"Error writing file: {str(e)}\n")

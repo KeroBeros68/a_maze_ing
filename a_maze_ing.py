@@ -43,9 +43,9 @@ try:
 except ValidationError as e:
     for error in e.errors():
         field = error["loc"][0] if error["loc"] else "model"
-        print(f"Field: {field}")
-        print(f"Error: {error['msg']}")
-        print(f"Type: {error['type']}\n")
+        sys.stderr.write(f"Field: {field}")
+        sys.stderr.write(f"Error: {error['msg']}")
+        sys.stderr.write(f"Type: {error['type']}\n")
     sys.exit(1)
 
 print(config)
@@ -59,9 +59,4 @@ except Exception as e:
     print(e)
     sys.exit(1)
 
-print("\33[1m")
-print(maze)
-print("\33[0m")
-
-print("\nSEED =", config.SEED)
 maze_generator.create_output_file()
