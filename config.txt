@@ -13,4 +13,4 @@ PERFECT=true
 # Maze generation algorithm (backtracking, etc.)
 ALGORITHM=backtracking
 # Seed
-SEED=4224522
+# SEED=4224522

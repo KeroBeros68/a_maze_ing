@@ -7,8 +7,9 @@ through the algorithm factory pattern.
 
 import random
 from sys import stderr
+from typing import Tuple
+import uuid
 from mazegen.maze.maze import Maze
-from mazegen.utils.model import ConfigModel
 from mazegen.algorithms.factory import AlgorithmFactory
 
 
@@ -31,7 +32,9 @@ class MazeGenerator:
         maze: The generated Maze object
     """
 
-    def __init__(self, config: ConfigModel):
+    def __init__(self, width: int, height: int, entry: Tuple[int, int],
+                 exit: Tuple[int, int], output_file: str,
+                 seed: int, algorithm: str):
         """Initialize MazeGenerator with configuration parameters.
 
         Args:
@@ -46,13 +49,13 @@ class MazeGenerator:
         Raises:
             ValueError: If the specified algorithm is not registered
         """
-        self.__width = config.WIDTH
-        self.__height = config.HEIGHT
-        self.__entry = config.ENTRY
-        self.__exit = config.EXIT
-        self.__output_file = config.OUTPUT_FILE
-        self.__seed = config.SEED
-        self.__algorithm_name = config.ALGORITHM
+        self.__width = width
+        self.__height = height
+        self.__entry = entry
+        self.__exit = exit
+        self.__output_file = output_file
+        self.__seed = seed
+        self.__algorithm_name = algorithm
         self.maze: Maze = Maze(
             self.__width, self.__height, self.__entry, self.__exit
         )
@@ -70,6 +73,8 @@ class MazeGenerator:
             ValueError: If the algorithm is not found
         """
         self.maze.init_grid()
+        if self.__seed is None:
+            self.generate_new_seed()
         random.seed(self.__seed)
 
         # Get algorithm from factory
@@ -107,3 +112,7 @@ class MazeGenerator:
                 file.write(f"{x1},{y1}")
         except (FileNotFoundError, PermissionError) as e:
             stderr.write(f"Error writing file: {str(e)}\n")
+
+    def generate_new_seed(self) -> None:
+        """Generate a random seed as a hex string."""
+        self.__seed = uuid.uuid4().hex

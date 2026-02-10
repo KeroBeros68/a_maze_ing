@@ -33,7 +33,7 @@ check_env = env_check.EnvCheck(module_list)
 check_env.check_process()
 
 from pydantic import ValidationError  # noqa: E402
-from mazegen.utils.model import ConfigModel  # noqa: E402
+from model import ConfigModel  # noqa: E402
 from mazegen.MazeGenerator import MazeGenerator  # noqa: E402
 from viewers.terminal.termview import TermView  # noqa: E402
 

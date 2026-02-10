@@ -18,7 +18,6 @@ Classes:
 from pydantic_settings import BaseSettings
 from pydantic import Field, model_validator
 from typing import Optional, Tuple
-import uuid
 
 
 class ConfigModel(BaseSettings):
@@ -31,18 +30,12 @@ class ConfigModel(BaseSettings):
     PERFECT: bool = Field(default=False, description="Generate a perfect maze")
     ALGORITHM: str = Field(default="backtracking",
                            description="Maze generation algorithm to use")
-    SEED: Optional[str] = Field(default_factory=lambda:
-                                ConfigModel._generate_seed(),
+    SEED: Optional[str] = Field(default=None,
                                 min_length=0, max_length=100,
                                 description="Seed generation")
 
     class Config:
         env_file = "config.txt"
-
-    @staticmethod
-    def _generate_seed() -> str:
-        """Generate a random seed as a hex string."""
-        return uuid.uuid4().hex
 
     @model_validator(mode="after")
     def validate_entry_exit(self) -> "ConfigModel":

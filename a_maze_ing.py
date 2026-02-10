@@ -33,8 +33,8 @@ check_env = env_check.EnvCheck(module_list)
 check_env.check_process()
 
 from pydantic import ValidationError  # noqa: E402
-from mazegen.utils.model import ConfigModel  # noqa: E402
-from mazegen.MazeGenerator import MazeGenerator  # noqa: E402
+from model import ConfigModel  # noqa: E402
+from controller import Controller  # noqa: E402
 
 
 print("\n===== A_maze_ing =====\n")
@@ -51,12 +51,45 @@ except ValidationError as e:
 print(config)
 print()
 
-maze_generator = MazeGenerator(config)
+control = Controller(config)
 
-try:
-    maze = maze_generator.generate_maze()
-except Exception as e:
-    print(e)
-    sys.exit(1)
+with control as c:
+    c.process()
 
-maze_generator.create_output_file()
+# try:
+#     maze = maze_generator.generate_maze()
+# except Exception as e:
+#     print(e)
+#     sys.exit(1)
+
+# try:
+#     control.start()
+#     print("✓ Keyboard input mode enabled")
+#     print("Press any key...\n")
+
+#     while True:
+#         key = control.poll()
+
+#         if key is not None:
+#             if key == "q":
+#                 print("Quit requested")
+#                 break
+#             elif key == "\x03":  # Ctrl+C
+#                 print("\nCtrl+C detected")
+#                 break
+#             elif ord(key) == 27:  # Escape
+#                 print("Escape detected")
+#                 break
+#             else:
+#                 print(f"Key pressed: '{key}' (code: {ord(key)})")
+
+#         time.sleep(0.05)  # Small delay to prevent tight loop
+
+# except KeyControlError as e:
+#     print(f"✗ Error: {e}", file=sys.stderr)
+#     sys.exit(1)
+# finally:
+#     terminal_manager.cleanup()
+#     print("✓ Terminal restored")
+
+# maze_generator.create_output_file()
