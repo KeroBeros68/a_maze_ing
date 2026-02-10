@@ -14,3 +14,5 @@ PERFECT=true
 ALGORITHM=backtracking
 # Seed
 # SEED=4224522
+# Display
+# DISPLAY=tty

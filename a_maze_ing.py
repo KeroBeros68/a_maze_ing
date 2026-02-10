@@ -53,43 +53,8 @@ print()
 
 control = Controller(config)
 
-with control as c:
-    c.process()
-
-# try:
-#     maze = maze_generator.generate_maze()
-# except Exception as e:
-#     print(e)
-#     sys.exit(1)
-
-# try:
-#     control.start()
-#     print("✓ Keyboard input mode enabled")
-#     print("Press any key...\n")
-
-#     while True:
-#         key = control.poll()
-
-#         if key is not None:
-#             if key == "q":
-#                 print("Quit requested")
-#                 break
-#             elif key == "\x03":  # Ctrl+C
-#                 print("\nCtrl+C detected")
-#                 break
-#             elif ord(key) == 27:  # Escape
-#                 print("Escape detected")
-#                 break
-#             else:
-#                 print(f"Key pressed: '{key}' (code: {ord(key)})")
-
-#         time.sleep(0.05)  # Small delay to prevent tight loop
-
-# except KeyControlError as e:
-#     print(f"✗ Error: {e}", file=sys.stderr)
-#     sys.exit(1)
-# finally:
-#     terminal_manager.cleanup()
-#     print("✓ Terminal restored")
-
-# maze_generator.create_output_file()
+try:
+    with control as c:
+        c.process()
+except Exception as e:
+    print("error:", {e}, file=sys.stderr)

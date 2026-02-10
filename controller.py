@@ -22,6 +22,7 @@ class Controller:
                                                         config.OUTPUT_FILE,
                                                         config.SEED,
                                                         config.ALGORITHM)
+        self.__display = None
         self.__maze = None
 
     def process(self):
@@ -45,7 +46,7 @@ class Controller:
                         print("\nProgram stopped.")
                         break
 
-                time.sleep(0.01)  # Small delay to prevent tight loop
+                time.sleep(0.01)
         finally:
             self.__control.stop()
 
