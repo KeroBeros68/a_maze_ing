@@ -33,6 +33,9 @@ class ConfigModel(BaseSettings):
     SEED: Optional[str] = Field(default=None,
                                 min_length=0, max_length=100,
                                 description="Seed generation")
+    MODE_GEN: str = Field(default="normal",
+                          description="Generation mode: "
+                          "'normal' or 'animated'")
 
     class Config:
         env_file = "config.txt"

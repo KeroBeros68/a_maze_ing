@@ -48,9 +48,6 @@ except ValidationError as e:
         sys.stderr.write(f"Type: {error['type']}\n")
     sys.exit(1)
 
-print(config)
-print()
-
 control = Controller(config)
 
 try:

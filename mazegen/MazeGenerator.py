@@ -32,9 +32,17 @@ class MazeGenerator:
         maze: The generated Maze object
     """
 
-    def __init__(self, width: int, height: int, entry: Tuple[int, int],
-                 exit: Tuple[int, int], output_file: str,
-                 seed: int, algorithm: str):
+    def __init__(
+        self,
+        width: int,
+        height: int,
+        entry: Tuple[int, int],
+        exit: Tuple[int, int],
+        output_file: str,
+        seed: int,
+        algorithm: str,
+        mode_gen: str,
+    ):
         """Initialize MazeGenerator with configuration parameters.
 
         Args:
@@ -56,18 +64,21 @@ class MazeGenerator:
         self.__output_file = output_file
         self.__seed = seed
         self.__algorithm_name = algorithm
+        self.__mode_gen = mode_gen
         self.maze: Maze = Maze(
             self.__width, self.__height, self.__entry, self.__exit
         )
 
-    def generate_maze(self) -> Maze:
+    def generate_maze(self):
         """Generate a maze using the configured algorithm.
 
         Creates a maze grid, initializes all cells, sets the random seed,
         and applies the selected algorithm starting from the entry point.
 
         Returns:
-            Maze: The generated maze object with passages carved
+            If mode_gen is 'animated': Generator yielding Maze states at
+            each step
+            Otherwise: Maze object with passages carved
 
         Raises:
             ValueError: If the algorithm is not found
@@ -85,8 +96,16 @@ class MazeGenerator:
             raise
 
         x, y = self.__entry
-        self.maze = algorithm.generate(self.maze, x, y)
-        return self.maze
+        animate = self.__mode_gen == "animated"
+        result = algorithm.generate(self.maze, x, y, animate=animate)
+
+        if animate:
+            # Return the generator
+            return result
+        else:
+            # Return the completed maze
+            self.maze = result
+            return self.maze
 
     def create_output_file(self) -> None:
         """Write the generated maze to an output file.

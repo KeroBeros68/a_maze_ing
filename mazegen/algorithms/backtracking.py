@@ -18,31 +18,49 @@ class BacktrackingAlgorithm(MazeAlgorithm):
     and removes walls between visited and current cells.
     """
 
-    def generate(self, maze: Maze, entry_x: int, entry_y: int) -> Maze:
+    def generate(
+        self, maze: Maze, entry_x: int, entry_y: int, animate: bool = False
+    ):
         """Generate a maze using the backtracking algorithm.
 
         Args:
             maze: Maze object to generate
             entry_x: Starting X coordinate
             entry_y: Starting Y coordinate
+            animate: If True, yields maze state at each step (for animation).
+                    If False, returns completed maze after generation.
 
         Returns:
-            Maze: The modified maze with passages carved by the algorithm
+            If animate=False: Maze object with passages carved
+            If animate=True: Generator yielding Maze states at each step
         """
         stack = [(entry_x, entry_y)]
 
-        while stack:
-            x1, y1 = stack[len(stack) - 1]
-            maze.maze_grid[y1][x1].visit(True)
-            try:
-                target = self.valid_target(x1, y1, maze)
-                x2, y2 = target
-                maze = self.remove_wall(x1, y1, x2, y2, maze)
-                x1, y1 = x2, y2
-                stack.append((x1, y1))
-            except Exception:
-                stack.pop()
-        return maze
+        def _generate():
+            """Internal generator that yields maze states."""
+            nonlocal maze
+            while stack:
+                x1, y1 = stack[len(stack) - 1]
+                maze.maze_grid[y1][x1].visit(True)
+                yield maze
+
+                try:
+                    target = self.valid_target(x1, y1, maze)
+                    x2, y2 = target
+                    maze = self.remove_wall(x1, y1, x2, y2, maze)
+                    yield maze
+                    x1, y1 = x2, y2
+                    stack.append((x1, y1))
+                except Exception:
+                    stack.pop()
+
+        if animate:
+            return _generate()
+        else:
+            # Run through all generations without yielding
+            for final_maze in _generate():
+                pass
+            return final_maze
 
 
 if __name__ == "__main__":

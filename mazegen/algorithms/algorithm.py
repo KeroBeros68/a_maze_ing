@@ -25,16 +25,21 @@ class MazeAlgorithm(ABC):
     """
 
     @abstractmethod
-    def generate(self, maze: Maze, entry_x: int, entry_y: int) -> Maze:
+    def generate(
+        self, maze: Maze, entry_x: int, entry_y: int, animate: bool = False
+    ):
         """Generate a maze starting from entry coordinates.
 
         Args:
             maze: The Maze object to generate
             entry_x: X coordinate of the entry point
             entry_y: Y coordinate of the entry point
+            animate: If True, yields maze state after each step (generator).
+                    If False, returns completed maze (Maze object)
 
         Returns:
-            Maze: The generated maze with passages carved
+            If animate=False: Maze object with passages carved
+            If animate=True: Generator yielding Maze states at each step
 
         Raises:
             NotImplementedError: Must be implemented by subclasses
@@ -61,20 +66,22 @@ class MazeAlgorithm(ABC):
             (all neighbors visited)
         """
         target = [
-            (x + dx, y + dy)
-            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]
+            (x + dx, y + dy) for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]
         ]
 
         valid_target = [
-            (vx, vy) for vx, vy in target
-            if 0 <= vx < maze.width and 0 <= vy < maze.height
+            (vx, vy)
+            for vx, vy in target
+            if 0 <= vx < maze.width
+            and 0 <= vy < maze.height
             and not maze.maze_grid[vy][vx].visited
         ]
 
         return random.choice(valid_target)
 
-    def remove_wall(self, x: int, y: int, x1: int, y1: int,
-                    maze: Maze) -> Maze:
+    def remove_wall(
+        self, x: int, y: int, x1: int, y1: int, maze: Maze
+    ) -> Maze:
         """Remove walls between two adjacent cells to create a passage.
 
         Determines the direction from current cell to target cell and removes

@@ -16,3 +16,5 @@ ALGORITHM=backtracking
 # SEED=4224522
 # Display
 # DISPLAY=tty
+# Generation mode: 'normal' (returns final maze) or 'animated' (generator)
+MODE_GEN=animated
