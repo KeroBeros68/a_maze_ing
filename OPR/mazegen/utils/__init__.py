@@ -1,5 +1,5 @@
 from mazegen.utils.utils import Wall, Direction
-from model import ConfigModel
+from model.Model import ConfigModel
 
 
 __all__ = ["Wall", "Direction", "ConfigModel"]

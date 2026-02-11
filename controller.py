@@ -1,8 +1,8 @@
 import time
 import sys
 from mazegen.MazeGenerator import MazeGenerator
-from KeyControl import KeyControl, TerminalManager
-from model import ConfigModel
+from keycontrol.KeyControl import KeyControl, TerminalManager
+from model.Model import ConfigModel
 from view.BasicView import BasicView
 from view.View import View
 
@@ -58,7 +58,7 @@ class Controller:
                 print("Test touch...")
             if key == "p" or key == "P":
                 self.__pause = not self.__pause
-            elif key == "\x1b":  # Escape
+            elif key == "\x1b" or key == "q" or key == "Q":  # Escape
                 print("\nProgram stopped.")
                 sys.exit(0)
 
