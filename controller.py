@@ -1,7 +1,10 @@
 import time
+import sys
 from mazegen.MazeGenerator import MazeGenerator
 from KeyControl import KeyControl, TerminalManager
 from model import ConfigModel
+from view.BasicView import BasicView
+from view.View import View
 
 
 class Controller:
@@ -25,34 +28,41 @@ class Controller:
             config.ALGORITHM,
             config.MODE_GEN,
         )
-        self.__display = None
+        self.__display: View = BasicView()
         self.__maze = None
+        self.__pause = False
+        self.__animation_speed = 0.2
 
     def process(self):
         """Start listening to keyboard input via non-blocking poll."""
         self.__control.start()
-        print("\nPress ENTER to display maze, R to regenerate, ESC to exit\n")
+        print("\nPress R to regenerate, ESC to exit\n")
 
+        self.generate_and_display_maze()
         try:
             while True:
-                key = self.__control.poll()
-
-                if key is not None:
-                    if key == "\r" or key == "\n":  # Enter
-                        print(self.__maze)
-                    elif key == "r" or key == "R":  # Regenerate
-                        print("Regenerating maze...")
-                        self.__generator.generate_new_seed()
-                        self.__generate_and_display_maze()
-                    elif key == "\x1b":  # Escape
-                        print("\nProgram stopped.")
-                        break
-
+                self.key_control()
                 time.sleep(0.01)
         finally:
             self.__control.stop()
 
-    def __generate_and_display_maze(self):
+    def key_control(self) -> None:
+        key = self.__control.poll()
+
+        if key is not None:
+            if key == "r" or key == "R":  # Regenerate
+                print("Regenerating maze...")
+                self.__generator.generate_new_seed()
+                self.generate_and_display_maze()
+            if key == "e" or key == "E":  # Regenerate
+                print("Test touch...")
+            if key == "p" or key == "P":
+                self.__pause = not self.__pause
+            elif key == "\x1b":  # Escape
+                print("\nProgram stopped.")
+                sys.exit(0)
+
+    def generate_and_display_maze(self):
         """Generate maze and handle animation if in animated mode."""
         result = self.__generator.generate_maze()
 
@@ -64,23 +74,21 @@ class Controller:
             try:
                 for maze_state in result:
                     # Check for keyboard input during animation
-                    key = self.__control.poll()
-                    if key == "\x1b":  # ESC to stop animation
-                        print("\nAnimation interrupted.")
-                        return
+                    self.key_control()
+                    while self.__pause:
+                        self.key_control()
+                        time.sleep(0.5)
                     self.__maze = maze_state
-                    print()
-                    print(maze_state)
-                    time.sleep(0.1)  # Small delay to see animation
+                    self.__display.render(self.__maze)
+                    time.sleep(self.__animation_speed)
             finally:
                 self.__control.stop()
         else:
             # Normal mode: just store and display final maze
             self.__maze = result
-            print(result)
+            self.__display.render(self.__maze)
 
     def __enter__(self):
-        self.__generate_and_display_maze()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
