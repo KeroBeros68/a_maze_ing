@@ -16,14 +16,21 @@ RESET   = \033[0m
 #                                  VARIABLES                                   #
 # **************************************************************************** #
 
-SRC = a_maze_ing.py \
-	  env_check.py \
-	  mazegen/utils/model.py \
-	  mazegen/utils/utils.py \
-	  mazegen/cell/cell.py \
-	  mazegen/maze/maze.py \
-	  mazegen/MazeGenerator.py \
-	  mazegen/algorithms/backtracking.py
+SRC_MYPY = a_maze_ing.py \
+	   controller.py \
+	   utils/env_check.py \
+	   keycontrol/KeyControl.py \
+	   mazegen/MazeGenerator.py \
+	   mazegen/algorithms/algorithm.py \
+	   mazegen/algorithms/backtracking.py \
+	   mazegen/algorithms/factory.py \
+	   mazegen/cell/cell.py \
+	   mazegen/maze/maze.py \
+	   mazegen/utils/utils.py \
+	   model/Model.py \
+	   view/View.py \
+	   view/ViewFactory.py \
+	   view/basic/BasicView.py
 
 # **************************************************************************** #
 #									Rules									   #
@@ -78,11 +85,11 @@ lint:
 	echo "${CYAN}Running flake8...${RESET}"; \
 	python3 -m flake8 --exclude=matrix_env; \
 	echo "${CYAN}Running mypy...${RESET}"; \
-	python3 -m mypy --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs --exclude=matrix_env $(SRC)
+	python3 -m mypy --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs --exclude=matrix_env $(SRC_MYPY)
 
 lint-strict:
 	python3 -m flake8 --exclude=matrix_env
-	python3 -m mypy --strict --exclude=matrix_env $(SRC)
+	python3 -m mypy --strict --exclude=matrix_env $(SRC_MYPY)
 
 clean:
 	printf "$(CYAN)Suppression de __pycache__...$(RESET) "

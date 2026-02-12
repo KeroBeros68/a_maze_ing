@@ -1,10 +1,10 @@
 import time
 import sys
 from mazegen.MazeGenerator import MazeGenerator
-from keycontrol.KeyControl import KeyControl, TerminalManager
-from model.Model import ConfigModel
+from keycontrol import KeyControl, TerminalManager
+from model import ConfigModel
 from view import ViewFactory
-from view.basic.BasicView import BasicView
+from view.basic import BasicView
 from view.View import View
 
 

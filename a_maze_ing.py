@@ -13,7 +13,7 @@ Dependencies:
 """
 
 from typing import Dict
-import utils.env_check as env_check
+from utils import EnvCheck
 import sys
 
 
@@ -28,12 +28,12 @@ module_list: Dict[str, Dict[str, str]] = {
     },
 }
 
-check_env = env_check.EnvCheck(module_list)
+check_env = EnvCheck(module_list)
 
 check_env.check_process()
 
 from pydantic import ValidationError  # noqa: E402
-from model.Model import ConfigModel  # noqa: E402
+from model import ConfigModel  # noqa: E402
 from controller import Controller  # noqa: E402
 
 
