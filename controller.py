@@ -28,10 +28,10 @@ class Controller:
             config.ALGORITHM,
             config.MODE_GEN,
         )
+        self.__animation_speed = 10
         self.__display: View = BasicView()
         self.__maze = None
         self.__pause = False
-        self.__animation_speed = 0.2
 
     def process(self):
         """Start listening to keyboard input via non-blocking poll."""
@@ -52,12 +52,16 @@ class Controller:
         if key is not None:
             if key == "r" or key == "R":  # Regenerate
                 print("Regenerating maze...")
-                self.__generator.generate_new_seed()
                 self.generate_and_display_maze()
             if key == "e" or key == "E":  # Regenerate
-                print("Test touch...")
+                self.__generator.generate_new_seed()
+                self.generate_and_display_maze()
             if key == "p" or key == "P":
                 self.__pause = not self.__pause
+            if key == "+":
+                self.more_speed()
+            if key == "-":
+                self.less_speed()
             elif key == "\x1b" or key == "q" or key == "Q":  # Escape
                 print("\nProgram stopped.")
                 sys.exit(0)
@@ -70,23 +74,32 @@ class Controller:
         if hasattr(result, "__iter__") and hasattr(result, "__next__"):
             # Animated mode: iterate through generator and display each step
             # Check for keyboard interrupts during animation
-            self.__control.start()
-            try:
-                for maze_state in result:
-                    # Check for keyboard input during animation
+            for maze_state in result:
+                # Check for keyboard input during animation
+                self.key_control()
+                while self.__pause:
                     self.key_control()
-                    while self.__pause:
-                        self.key_control()
-                        time.sleep(0.5)
-                    self.__maze = maze_state
-                    self.__display.render(self.__maze)
-                    time.sleep(self.__animation_speed)
-            finally:
-                self.__control.stop()
+                    time.sleep(0.5)
+                self.__maze = maze_state
+                self.__display.render(self.__maze, self.__animation_speed)
+                time.sleep(1 / self.__animation_speed)
         else:
             # Normal mode: just store and display final maze
             self.__maze = result
-            self.__display.render(self.__maze)
+            self.__display.render(self.__maze, self.__animation_speed)
+
+    def more_speed(self) -> None:
+        if self.__animation_speed == 120:
+            return
+        if self.__animation_speed < 1:
+            self.__animation_speed += 0.1
+        else:
+            self.__animation_speed += 1
+
+    def less_speed(self) -> None:
+        if self.__animation_speed == 1:
+            return
+        self.__animation_speed -= 1
 
     def __enter__(self):
         return self

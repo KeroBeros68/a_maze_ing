@@ -1,5 +1,5 @@
 from mazegen.maze.maze import Maze
-from model.Model import ConfigModel
+from model import ConfigModel
 from dataclasses import dataclass
 from typing import List, Iterable, Tuple, Optional, Callable
 import time

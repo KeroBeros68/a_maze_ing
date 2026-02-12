@@ -8,7 +8,7 @@ import random
 from sys import stderr
 from mazegen.algorithms.backtracking import backtrack
 from mazegen.maze.maze import Maze
-from model.Model import ConfigModel
+from model import ConfigModel
 
 
 class MazeGenerator:

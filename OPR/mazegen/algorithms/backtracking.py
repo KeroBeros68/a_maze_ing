@@ -9,7 +9,7 @@ import random
 from typing import Tuple
 from mazegen.maze.maze import Maze
 from mazegen.utils.utils import Direction, Wall
-from model.Model import ConfigModel
+from model import ConfigModel
 from viewers.terminal.termview import TermView  # noqa: E402
 
 

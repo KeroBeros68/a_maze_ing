@@ -13,3 +13,4 @@ PERFECT=true
 # How to visualize?
 # 1: raw, 2: terminal display, 3: terminal animation
 VIEW=3
+SEED=323232323232323232323232323232
