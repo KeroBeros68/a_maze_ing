@@ -1,9 +1,8 @@
-from typing import Any
-from view import View
+from view.View import View
 
 
 class ViewFactory:
-    __view: dict[str, type[Any]] = {}
+    __view: dict[str, type[View]] = {}
 
     @classmethod
     def _init_view(cls) -> None:

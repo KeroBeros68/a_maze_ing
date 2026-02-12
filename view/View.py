@@ -4,11 +4,11 @@ from mazegen.maze.maze import Maze
 
 
 class View(ABC):
-    def __init__(self):
+    def __init__(self) -> None:
         self.__color = 1
 
     @abstractmethod
-    def render(self, maze: Maze) -> None:
+    def render(self, maze: Maze, speed: int) -> None:
         pass
 
     @abstractmethod

@@ -6,9 +6,9 @@ through the algorithm factory pattern.
 """
 
 import random
-from sys import stderr
-from typing import Tuple
 import uuid
+from sys import stderr
+from typing import Tuple, Optional, Generator
 from mazegen.maze.maze import Maze
 from mazegen.algorithms.factory import AlgorithmFactory
 
@@ -39,7 +39,7 @@ class MazeGenerator:
         entry: Tuple[int, int],
         exit: Tuple[int, int],
         output_file: str,
-        seed: int,
+        seed: Optional[str],
         algorithm: str,
         mode_gen: str,
     ):
@@ -69,16 +69,16 @@ class MazeGenerator:
             self.__width, self.__height, self.__entry, self.__exit
         )
 
-    def generate_maze(self):
+    def generate_maze(self) -> Generator[Maze, None, None]:
         """Generate a maze using the configured algorithm.
 
         Creates a maze grid, initializes all cells, sets the random seed,
         and applies the selected algorithm starting from the entry point.
 
         Returns:
-            If mode_gen is 'animated': Generator yielding Maze states at
-            each step
-            Otherwise: Maze object with passages carved
+            Generator yielding Maze states. When mode_gen is 'animated',
+            yields intermediate states. Otherwise, yields only the final
+            completed maze.
 
         Raises:
             ValueError: If the algorithm is not found
@@ -97,15 +97,7 @@ class MazeGenerator:
 
         x, y = self.__entry
         animate = self.__mode_gen == "animated"
-        result = algorithm.generate(self.maze, x, y, animate=animate)
-
-        if animate:
-            # Return the generator
-            return result
-        else:
-            # Return the completed maze
-            self.maze = result
-            return self.maze
+        return algorithm.generate(self.maze, x, y, animate=animate)
 
     def create_output_file(self) -> None:
         """Write the generated maze to an output file.

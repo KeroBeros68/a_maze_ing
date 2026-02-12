@@ -9,7 +9,7 @@ existing code.
 from abc import ABC, abstractmethod
 from mazegen.maze.maze import Maze
 from mazegen.utils.utils import Direction, Wall
-from typing import Tuple
+from typing import Tuple, Generator
 import random
 
 
@@ -27,19 +27,19 @@ class MazeAlgorithm(ABC):
     @abstractmethod
     def generate(
         self, maze: Maze, entry_x: int, entry_y: int, animate: bool = False
-    ):
+    ) -> Generator[Maze, None, None]:
         """Generate a maze starting from entry coordinates.
 
         Args:
             maze: The Maze object to generate
             entry_x: X coordinate of the entry point
             entry_y: Y coordinate of the entry point
-            animate: If True, yields maze state after each step (generator).
-                    If False, returns completed maze (Maze object)
+            animate: If True, yields maze state after each step.
+                    If False, yields only the final completed maze.
 
         Returns:
-            If animate=False: Maze object with passages carved
-            If animate=True: Generator yielding Maze states at each step
+            Generator yielding Maze states. When animate=False, yields only
+            the final completed maze state.
 
         Raises:
             NotImplementedError: Must be implemented by subclasses

@@ -5,7 +5,7 @@ import tty
 import select
 import os
 import atexit
-from typing import Optional
+from typing import Any, Optional
 
 # ANSI escape codes
 CURSOR_SHOW = "\33[?25h"
@@ -115,7 +115,7 @@ class KeyControl:
         signal.signal(signal.SIGINT, self._signal_handler)
         signal.signal(signal.SIGTERM, self._signal_handler)
 
-    def _signal_handler(self, signum: int, frame: any) -> None:
+    def _signal_handler(self, signum: int, frame: Any) -> None:
         """Signal handler for clean program shutdown."""
         self.exit_program()
 
@@ -190,7 +190,7 @@ class KeyControl:
         self.start()
         return self
 
-    def __exit__(self, exc_type: any, exc_val: any, exc_tb: any) -> None:
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
         """Exit the context manager."""
         try:
             self.stop()

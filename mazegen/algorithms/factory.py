@@ -5,7 +5,6 @@ Factory design pattern to create algorithm instances based on
 configuration, supporting the Open/Closed Principle.
 """
 
-from typing import Any
 from mazegen.algorithms.algorithm import MazeAlgorithm
 
 
@@ -20,7 +19,7 @@ class AlgorithmFactory:
         __algorithms: Dictionary mapping algorithm names to classes
     """
 
-    __algorithms: dict[str, type[Any]] = {}
+    __algorithms: dict[str, type[MazeAlgorithm]] = {}
 
     @classmethod
     def _init_algorithms(cls) -> None:
