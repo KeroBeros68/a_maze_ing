@@ -48,6 +48,7 @@ class Maze:
         self.entry: Tuple[int, int] = entry
         self.exit: Tuple[int, int] = exit
         self.__active_cell: Optional[Tuple[int, int]] = None
+        self.__done_gen: bool = False
 
     @property
     def width(self) -> int:
@@ -86,6 +87,14 @@ class Maze:
             or None to clear
         """
         self.__active_cell = value
+
+    @property
+    def done_gen(self) -> bool:
+        return self.__done_gen
+
+    @done_gen.setter
+    def done_gen(self, value: bool) -> None:
+        self.__done_gen = value
 
     def init_grid(self) -> None:
         """Initialize the maze grid with Cell objects.

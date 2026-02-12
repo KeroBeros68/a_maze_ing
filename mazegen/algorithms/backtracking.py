@@ -58,6 +58,7 @@ class BacktrackingAlgorithm(MazeAlgorithm):
                 except Exception:
                     stack.pop()
             # Always yield the final maze
+            maze.done_gen = True
             yield maze
 
         return _generate()
