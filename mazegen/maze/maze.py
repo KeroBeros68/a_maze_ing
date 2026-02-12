@@ -5,7 +5,7 @@ including all cells, dimensions, and entry/exit points. It handles grid
 initialization and text-based visualization.
 """
 
-from typing import Tuple
+from typing import Optional, Tuple
 from mazegen.utils.utils import Wall
 from mazegen.cell.cell import Cell
 
@@ -47,6 +47,7 @@ class Maze:
         self.__height: int = height
         self.entry: Tuple[int, int] = entry
         self.exit: Tuple[int, int] = exit
+        self.__active_cell: Optional[Tuple[int, int]] = None
 
     @property
     def width(self) -> int:
@@ -65,6 +66,26 @@ class Maze:
             int: Number of rows in the maze
         """
         return self.__height
+
+    @property
+    def active_cell(self) -> Optional[Tuple[int, int]]:
+        """Get the currently active cell coordinates.
+
+        Returns:
+            Optional[Tuple[int, int]]: Coordinates (x, y) of the active cell,
+            or None if no cell is active
+        """
+        return self.__active_cell
+
+    @active_cell.setter
+    def active_cell(self, value: Optional[Tuple[int, int]]) -> None:
+        """Set the currently active cell coordinates.
+
+        Args:
+            value: Tuple (x, y) for the active cell coordinates,
+            or None to clear
+        """
+        self.__active_cell = value
 
     def init_grid(self) -> None:
         """Initialize the maze grid with Cell objects.

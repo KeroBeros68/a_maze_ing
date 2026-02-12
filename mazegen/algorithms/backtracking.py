@@ -43,6 +43,7 @@ class BacktrackingAlgorithm(MazeAlgorithm):
                 x1, y1 = stack[len(stack) - 1]
                 maze.maze_grid[y1][x1].visit(True)
                 if animate:
+                    maze.active_cell = stack[len(stack) - 1]
                     yield maze
 
                 try:
@@ -50,6 +51,7 @@ class BacktrackingAlgorithm(MazeAlgorithm):
                     x2, y2 = target
                     maze = self.remove_wall(x1, y1, x2, y2, maze)
                     if animate:
+                        maze.active_cell = target
                         yield maze
                     x1, y1 = x2, y2
                     stack.append((x1, y1))
