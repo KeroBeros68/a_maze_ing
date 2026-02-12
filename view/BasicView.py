@@ -7,5 +7,6 @@ class BasicView(View):
         super().__init__()
 
     def render(self, maze: Maze, speed) -> None:
+        print("\33[H")
         print("\n Mon maze, speed:", speed)
         print(maze)
