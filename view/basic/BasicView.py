@@ -10,3 +10,6 @@ class BasicView(View):
         print("\33[H")
         print("\n Mon maze, speed:", speed)
         print(maze)
+
+    def change_color(self, new_color):
+        print("coucou")

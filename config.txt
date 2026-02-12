@@ -14,7 +14,7 @@ PERFECT=true
 ALGORITHM=backtracking
 # Seed
 # SEED=4224522
-# Display
-# DISPLAY=tty
+# Display "basic", "tty", "mlx"
+DISPLAY_MODE=basic
 # Generation mode: 'normal' (returns final maze) or 'animated' (generator)
 MODE_GEN=animated

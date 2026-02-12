@@ -15,30 +15,38 @@ Classes:
     ConfigModel: Pydantic BaseSettings model for maze configuration
 """
 
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field, model_validator
 from typing import Optional, Tuple
 
 
 class ConfigModel(BaseSettings):
+    model_config = SettingsConfigDict(env_file="config.txt")
+
     WIDTH: int = Field(..., ge=0, le=200, description="Width of the maze")
     HEIGHT: int = Field(..., ge=0, le=200, description="Height of the maze")
     ENTRY: Tuple[int, int] = Field(..., description="Entry coordinates (x, y)")
     EXIT: Tuple[int, int] = Field(..., description="Exit coordinates (x, y)")
-    OUTPUT_FILE: str = Field(..., min_length=4, max_length=15,
-                             description="Output file name")
+    OUTPUT_FILE: str = Field(
+        ..., min_length=4, max_length=15, description="Output file name"
+    )
     PERFECT: bool = Field(default=False, description="Generate a perfect maze")
-    ALGORITHM: str = Field(default="backtracking",
-                           description="Maze generation algorithm to use")
-    SEED: Optional[str] = Field(default=None,
-                                min_length=0, max_length=100,
-                                description="Seed generation")
-    MODE_GEN: str = Field(default="normal",
-                          description="Generation mode: "
-                          "'normal' or 'animated'")
-
-    class Config:
-        env_file = "config.txt"
+    ALGORITHM: str = Field(
+        default="backtracking", description="Maze generation algorithm to use"
+    )
+    SEED: Optional[str] = Field(
+        default=None,
+        min_length=0,
+        max_length=100,
+        description="Seed generation",
+    )
+    MODE_GEN: str = Field(
+        default="normal",
+        description="Generation mode: " "'normal' or 'animated'",
+    )
+    DISPLAY_MODE: str = Field(
+        default="basic", description="Display mode (basic, tty, mlx)"
+    )
 
     @model_validator(mode="after")
     def validate_entry_exit(self) -> "ConfigModel":
@@ -65,15 +73,18 @@ class ConfigModel(BaseSettings):
 
         # Check they are different
         if self.ENTRY == self.EXIT:
-            raise ValueError("Exit coordinates cannot be "
-                             "the same as Entry coordinates")
+            raise ValueError(
+                "Exit coordinates cannot be " "the same as Entry coordinates"
+            )
 
         # Check they are within bounds
         if x1 >= self.WIDTH or x2 >= self.WIDTH:
             raise ValueError(
-                f"Entry or Exit X coordinate exceeds width ({self.WIDTH})")
+                f"Entry or Exit X coordinate exceeds width ({self.WIDTH})"
+            )
         if y1 >= self.HEIGHT or y2 >= self.HEIGHT:
             raise ValueError(
-                f"Entry or Exit Y coordinate exceeds height ({self.HEIGHT})")
+                f"Entry or Exit Y coordinate exceeds height ({self.HEIGHT})"
+            )
 
         return self

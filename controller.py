@@ -3,6 +3,7 @@ import sys
 from mazegen.MazeGenerator import MazeGenerator
 from keycontrol.KeyControl import KeyControl, TerminalManager
 from model.Model import ConfigModel
+from view import ViewFactory
 from view.basic.BasicView import BasicView
 from view.View import View
 
@@ -37,11 +38,17 @@ class Controller:
         )
         self.__animation_speed = BASE_FPS
         self.__display: View = BasicView()
+        self.__display_name = config.DISPLAY_MODE
         self.__maze = None
         self.__pause = False
 
     def process(self):
         """Start listening to keyboard input via non-blocking poll."""
+        try:
+            self.__display = ViewFactory.create(self.__display_name)
+        except ValueError as e:
+            sys.stderr.write(f"Error: {e}\n")
+            raise
         self.__control.start()
         print("\33[2J")
         self.generate_and_display_maze()
@@ -51,26 +58,23 @@ class Controller:
 
     def key_control(self) -> None:
         key = self.__control.poll()
-        try:
-            if key is not None:
-                if key in ("r", "R"):  # Regenerate
-                    print("Regenerating maze...")
-                    self.generate_and_display_maze()
-                if key in ("e", "E"):  # Regenerate
-                    self.__generator.generate_new_seed()
-                    self.generate_and_display_maze()
-                if key in ("p", "P", " "):
-                    self.__pause = not self.__pause
-                if key in ("+"):
-                    self.more_speed()
-                if key in ("-"):
-                    self.less_speed()
-                elif key in ("\x1b", "q", "Q"):  # Escape
-                    print("\nProgram stopped.")
-                    sys.exit(0)
-        finally:
-            self.__control.stop()
-            sys.exit(1)
+        if key is not None:
+            if key in ("r", "R"):  # Regenerate
+                print("Regenerating maze...")
+                self.generate_and_display_maze()
+            if key in ("e", "E"):  # Regenerate
+                self.__generator.generate_new_seed()
+                self.generate_and_display_maze()
+            if key in ("p", "P", " "):
+                self.__pause = not self.__pause
+            if key in ("+"):
+                self.more_speed()
+            if key in ("-"):
+                self.less_speed()
+            elif key in ("\x1b", "q", "Q"):  # Escape
+                print("\nProgram stopped.")
+                self.__control.stop()
+                sys.exit(0)
 
     def generate_and_display_maze(self):
         """Generate maze and handle animation if in animated mode."""
