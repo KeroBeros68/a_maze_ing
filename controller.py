@@ -3,7 +3,7 @@ import sys
 from mazegen.MazeGenerator import MazeGenerator
 from keycontrol.KeyControl import KeyControl, TerminalManager
 from model.Model import ConfigModel
-from view.BasicView import BasicView
+from view.basic.BasicView import BasicView
 from view.View import View
 
 

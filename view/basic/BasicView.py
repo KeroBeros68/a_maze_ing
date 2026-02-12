@@ -1,5 +1,5 @@
 from mazegen.maze.maze import Maze
-from .View import View
+from ..View import View
 
 
 class BasicView(View):
