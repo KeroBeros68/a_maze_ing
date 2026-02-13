@@ -99,15 +99,19 @@ class MazeAlgorithm(ABC):
             Maze: The modified maze with walls removed
         """
         if x + 1 == x1:
-            maze.maze_grid[y][x].remove_wall(Wall.EAST)
-            maze.maze_grid[y1][x1].remove_wall(Direction.EAST.opposite.wall)
+            maze.maze_grid[y][x].remove_cell_wall(Wall.EAST)
+            maze.maze_grid[y1][x1].remove_cell_wall(
+                Direction.EAST.opposite.wall)
         if x - 1 == x1:
-            maze.maze_grid[y][x].remove_wall(Wall.WEST)
-            maze.maze_grid[y1][x1].remove_wall(Direction.WEST.opposite.wall)
+            maze.maze_grid[y][x].remove_cell_wall(Wall.WEST)
+            maze.maze_grid[y1][x1].remove_cell_wall(
+                Direction.WEST.opposite.wall)
         if y + 1 == y1:
-            maze.maze_grid[y][x].remove_wall(Wall.SOUTH)
-            maze.maze_grid[y1][x1].remove_wall(Direction.SOUTH.opposite.wall)
+            maze.maze_grid[y][x].remove_cell_wall(Wall.SOUTH)
+            maze.maze_grid[y1][x1].remove_cell_wall(
+                Direction.SOUTH.opposite.wall)
         if y - 1 == y1:
-            maze.maze_grid[y][x].remove_wall(Wall.NORTH)
-            maze.maze_grid[y1][x1].remove_wall(Direction.NORTH.opposite.wall)
+            maze.maze_grid[y][x].remove_cell_wall(Wall.NORTH)
+            maze.maze_grid[y1][x1].remove_cell_wall(
+                Direction.NORTH.opposite.wall)
         return maze

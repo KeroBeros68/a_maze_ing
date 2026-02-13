@@ -41,7 +41,7 @@ class BacktrackingAlgorithm(MazeAlgorithm):
             nonlocal maze
             while stack:
                 x1, y1 = stack[len(stack) - 1]
-                maze.maze_grid[y1][x1].visit(True)
+                maze.maze_grid[y1][x1].visited = True
                 if animate:
                     maze.active_cell = stack[len(stack) - 1]
                     yield maze

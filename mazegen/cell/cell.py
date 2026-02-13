@@ -32,11 +32,12 @@ class Cell:
             y: Y coordinate in the maze grid
         """
         self.__wall: int = 0xF
-        self.visited: bool = False
+        self.__visited: bool = False
+        self.__locked: bool = False
         self.__x: int = x
         self.__y: int = y
 
-    def remove_wall(self, wall: Wall) -> None:
+    def remove_cell_wall(self, wall: Wall) -> None:
         """Remove a wall from the cell using bitwise AND operation.
 
         Args:
@@ -44,13 +45,17 @@ class Cell:
         """
         self.__wall &= ~wall
 
-    def visit(self, is_visited: bool) -> None:
-        """Mark cell as visited or unvisited.
+    @property
+    def wall(self) -> int:
+        return self.__wall
 
-        Args:
-            is_visited: True to mark cell as visited, False otherwise
-        """
-        self.visited = is_visited
+    @property
+    def visited(self) -> bool:
+        return self.__visited
+
+    @visited.setter
+    def visited(self, value: bool) -> None:
+        self.__visited = value
 
     def __str__(self) -> str:
         """Return detailed string representation of the cell.
