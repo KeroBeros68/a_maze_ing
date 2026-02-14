@@ -21,6 +21,24 @@ from typing import Optional, Tuple
 
 
 class ConfigModel(BaseSettings):
+    """Pydantic configuration model for maze generation settings.
+
+    Validates and loads maze generation parameters from config.txt file.
+    Ensures all configuration values are within valid ranges and
+    coordinates are consistent.
+
+    Attributes:
+        WIDTH: Width of the maze (0-200)
+        HEIGHT: Height of the maze (0-200)
+        ENTRY: Entry point coordinates (x, y)
+        EXIT: Exit point coordinates (x, y)
+        OUTPUT_FILE: Path to output file for generated maze
+        PERFECT: Whether to generate perfect maze (no loops)
+        ALGORITHM: Maze generation algorithm name
+        SEED: Random seed for reproducible generation
+        MODE_GEN: Generation mode ("normal" or "animated")
+        DISPLAY_MODE: Display mode ("basic", "tty", or "mlx")
+    """
     model_config = SettingsConfigDict(env_file="config.txt")
 
     WIDTH: int = Field(..., ge=0, le=200, description="Width of the maze")

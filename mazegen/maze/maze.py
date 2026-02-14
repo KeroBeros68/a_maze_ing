@@ -90,10 +90,20 @@ class Maze:
 
     @property
     def done_gen(self) -> bool:
+        """Check if maze generation is complete.
+
+        Returns:
+            bool: True if generation has finished
+        """
         return self.__done_gen
 
     @done_gen.setter
     def done_gen(self, value: bool) -> None:
+        """Mark generation as complete or incomplete.
+
+        Args:
+            value: Whether generation is complete
+        """
         self.__done_gen = value
 
     def init_grid(self) -> None:

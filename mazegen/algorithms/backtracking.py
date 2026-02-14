@@ -44,7 +44,6 @@ class BacktrackingAlgorithm(MazeAlgorithm):
                 maze.maze_grid[y1][x1].visited = True
                 if animate:
                     maze.active_cell = stack[len(stack) - 1]
-                    yield maze
 
                 try:
                     target = self.valid_target(x1, y1, maze)

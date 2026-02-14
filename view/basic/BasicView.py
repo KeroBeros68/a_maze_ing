@@ -1,34 +1,103 @@
+"""Basic text-based maze visualization.
+
+This module provides a simple terminal-based maze visualization that displays
+the maze grid in ASCII art format with walls represented graphically.
+
+Classes:
+    BasicView: Text-based maze renderer
+"""
+
+from typing import List, Optional
 from mazegen.cell.cell import Cell
 from mazegen.maze.maze import Maze
+from view.utils.Colors import ColorsTty
 from ..View import View
 
 
 class BasicView(View):
+    """Simple text-based maze visualization using ASCII art.
+
+    Renders the maze grid in the terminal with cells represented as boxes
+    with visible walls. Shows generation progress and current active cell.
+    """
+
     def __init__(self) -> None:
-        super().__init__()
+        """Initialize the BasicView."""
+        self.__color_list: Optional[List[ColorsTty]] = (
+            ColorsTty.get_ordered_colors()
+        )
+        self.__active_color: Optional[ColorsTty] = self.__color_list[0]
+        self.__entry_color: Optional[ColorsTty] = ColorsTty.ENTRY
+        self.__exit_color: Optional[ColorsTty] = ColorsTty.EXIT
+        self.__closed_color: Optional[ColorsTty] = ColorsTty.CLOSED
 
     def render(self, maze: Maze, speed: int) -> None:
-        print("\33[H")
-        print("\n Mon maze, speed:", speed, maze.active_cell)
-        print(self.print_maze(maze))
-        print()
-        print(maze)
+        """Render the maze to terminal output.
+
+        Displays the maze grid, current speed, active cell position,
+        and generation status.
+
+        Args:
+            maze: The Maze object to render
+            speed: Current animation speed in FPS
+        """
+        print("\n \33[H Mon maze, speed:", speed, maze.active_cell)
+        print(
+            self.__active_color.value,
+            self.print_maze(maze),
+            ColorsTty.RESET.value,
+        )
         print("\n Generation finished:", maze.done_gen)
 
     def change_color(self, new_color: int) -> None:
-        print("coucou")
+        """Change the display color based on direction.
+
+        Args:
+            new_color: -1 to go to previous color, 1 to go to next color
+        """
+        if self.__color_list is None or len(self.__color_list) == 0:
+            return
+
+        # Find current active color index
+        current_index = self.__color_list.index(self.__active_color)
+
+        if new_color == -1:  # Previous color
+            new_index = (current_index - 1) % len(self.__color_list)
+        elif new_color == 1:  # Next color
+            new_index = (current_index + 1) % len(self.__color_list)
+        else:
+            return
+
+        self.__active_color = self.__color_list[new_index]
 
     def view_cell(self, cell: Cell) -> str:
+        """Generate ASCII art representation of a single cell.
+
+        Args:
+            cell: The Cell object to visualize
+
+        Returns:
+            str: Multi-line ASCII art string representing the cell with walls
+        """
         return "\n".join(
             [
-                f"/ {'==' if cell.wall & 0b0001 else '  '} \\",
-                f"{'| ' if cell.wall & 0b1000 else '  '}  "
-                f"{' |' if cell.wall & 0b0010 else '  '}",
-                f"\\ {'==' if cell.wall & 0b0100 else '  '} /",
+                f"▒▒{'▒▒' if cell.wall & 0b0001 else '░░'}▒▒",
+                f"{'▒▒' if cell.wall & 0b1000 else '░░'}"
+                f"░░"
+                f"{'▒▒' if cell.wall & 0b0010 else '░░'}",
+                f"▒▒{'▒▒' if cell.wall & 0b0100 else '░░'}▒▒",
             ]
         )
 
     def print_maze(self, maze: Maze) -> str:
+        """Generate ASCII art representation of the entire maze.
+
+        Args:
+            maze: The Maze object to visualize
+
+        Returns:
+            str: Multi-line ASCII art string representing the entire maze grid
+        """
         result = ""
         for row in maze.maze_grid:
             row_str = ["", "", ""]

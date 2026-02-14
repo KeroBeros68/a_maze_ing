@@ -1,3 +1,15 @@
+"""Non-blocking keyboard input handling for terminal applications.
+
+This module provides terminal state management and non-blocking keyboard
+input functionality for Unix/Linux systems. It handles terminal
+configuration and restoration with signal handling for clean shutdown.
+
+Classes:
+    KeyControlError: Exception for keyboard control errors
+    TerminalManager: Manages terminal state configuration
+    KeyControl: Non-blocking keyboard input handler
+"""
+
 import sys
 import signal
 import termios

@@ -1,3 +1,13 @@
+"""Main controller for maze generation application.
+
+This module manages the interaction between the user and the maze generation
+system, handling keyboard input, animation speed control, and display updates.
+
+Classes:
+    Controller: Main controller orchestrating maze generation
+    and user interaction
+"""
+
 import time
 import sys
 from typing import Optional
@@ -59,27 +69,45 @@ class Controller:
             time.sleep(0.01)
 
     def key_control(self) -> None:
+        """Handle keyboard input for maze control.
+
+        Processes keyboard commands:
+        - r: Regenerate maze
+        - e: Generate new seed
+        - p/space: Pause/unpause animation
+        - +: Increase animation speed
+        - -: Decrease animation speed
+        - q/esc: Quit application
+        """
         key = self.__control.poll()
         if key is not None:
             if key in ("r", "R"):  # Regenerate
-                print("Regenerating maze...")
                 self.generate_and_display_maze()
-            if key in ("e", "E"):  # Regenerate
+            elif key in ("e", "E"):  # Regenerate
                 self.__generator.generate_new_seed()
                 self.generate_and_display_maze()
-            if key in ("p", "P", " "):
+            elif key in ("p", "P", " "):
                 self.__pause = not self.__pause
-            if key in ("+"):
-                self.more_speed()
-            if key in ("-"):
-                self.less_speed()
+            elif key in ("+"):
+                self.__more_speed()
+            elif key in ("-"):
+                self.__less_speed()
+            elif key in ("c"):
+                self.__change_color(-1)
+            elif key in ("v"):
+                self.__change_color(1)
             elif key in ("\x1b", "q", "Q"):  # Escape
                 print("\nProgram stopped.")
                 self.__control.stop()
                 sys.exit(0)
 
     def generate_and_display_maze(self) -> None:
-        """Generate maze and handle animation if in animated mode."""
+        """Generate and display the maze with animation.
+
+        Orchestrates maze generation and rendering, supporting both
+        animated and non-animated modes with pause capability.
+        Handles keyboard input during animation for speed/pause control.
+        """
         result = self.__generator.generate_maze()
 
         # Always iterate through the generator
@@ -91,17 +119,38 @@ class Controller:
                 time.sleep(TIME_PAUSE)
             self.__maze = maze_state
             self.__display.render(self.__maze, self.__animation_speed)
-            time.sleep(1 / self.__animation_speed)
+            animation_speed = 1 / self.__animation_speed
+            self.__reactive_sleep(animation_speed)
 
-    def more_speed(self) -> None:
+    def __reactive_sleep(self, duration: float) -> None:
+        """Sleep while remaining responsive to keyboard input.
+
+        Provides a non-blocking sleep that periodically checks for keyboard
+        input to ensure responsiveness during animation delays.
+
+        Args:
+            duration: Duration to sleep in seconds
+        """
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            self.key_control()
+            time.sleep(0.01)
+
+    def __more_speed(self) -> None:
+        """Increase animation speed (up to MAX_FPS)."""
         if self.__animation_speed == MAX_FPS:
             return
         self.__animation_speed += 1
 
-    def less_speed(self) -> None:
+    def __less_speed(self) -> None:
+        """Decrease animation speed (down to MIN_FPS)."""
         if self.__animation_speed == MIN_FPS:
             return
         self.__animation_speed -= 1
+
+    def __change_color(self, value: int) -> None:
+        self.__display.change_color(value)
+        self.__display.render(self.__maze, self.__animation_speed)
 
     def __enter__(self) -> "Controller":
         return self

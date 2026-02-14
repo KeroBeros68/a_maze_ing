@@ -14,12 +14,14 @@ class Cell:
     Each cell has four walls (North, East, South, West) represented as bits
     in a 4-bit integer. Walls can be removed to create passages between cells.
     The visited flag tracks whether the cell has been processed during
-    maze generation.
+    maze generation. The locked flag can prevent wall modifications.
 
     Attributes:
         __wall: 4-bit integer representing walls (0xF = all walls,
         0x0 = no walls)
-        visited: Boolean indicating if cell was visited during generation
+        __visited: Boolean indicating if cell was visited during generation
+        __locked: Boolean indicating if cell is locked
+                            (wall modifications prevented)
         __x: X coordinate of cell in maze grid
         __y: Y coordinate of cell in maze grid
     """
@@ -47,15 +49,48 @@ class Cell:
 
     @property
     def wall(self) -> int:
+        """Get the wall configuration of this cell.
+
+        Returns:
+            int: 4-bit integer where each bit represents a wall
+        """
         return self.__wall
 
     @property
     def visited(self) -> bool:
+        """Check if this cell has been visited.
+
+        Returns:
+            bool: True if cell was visited during maze generation
+        """
         return self.__visited
 
     @visited.setter
     def visited(self, value: bool) -> None:
+        """Mark the cell as visited or unvisited.
+
+        Args:
+            value: Whether the cell is visited
+        """
         self.__visited = value
+
+    @property
+    def locked(self) -> bool:
+        """Check if this cell is locked.
+
+        Returns:
+            bool: True if cell is locked (wall modifications prevented)
+        """
+        return self.__locked
+
+    @locked.setter
+    def locked(self, value: bool) -> None:
+        """Lock or unlock this cell.
+
+        Args:
+            value: Whether the cell is locked
+        """
+        self.__locked = value
 
     def __str__(self) -> str:
         """Return detailed string representation of the cell.
@@ -87,46 +122,46 @@ if __name__ == "__main__":
     cell = Cell(0, 0)
     print("Default cell, expected: 15, actual:", cell)
 
-    cell.remove_wall(Wall.EAST)
+    cell.remove_cell_wall(Wall.EAST)
     print("Cell - East wall removed,  expected: 13, actual:", cell)
 
     cell = Cell(0, 0)
-    cell.remove_wall(Wall.NORTH)
+    cell.remove_cell_wall(Wall.NORTH)
     print("Cell - North wall removed, expected: 14, actual:", cell)
 
     cell = Cell(0, 0)
-    cell.remove_wall(Wall.SOUTH)
+    cell.remove_cell_wall(Wall.SOUTH)
     print("Cell - South wall removed, expected: 11, actual:", cell)
 
     cell = Cell(0, 0)
-    cell.remove_wall(Wall.WEST)
+    cell.remove_cell_wall(Wall.WEST)
     print("Cell - West walls removed, expected:  7, actual:", cell)
 
     cell = Cell(0, 0)
-    cell.remove_wall(Wall.SOUTH)
-    cell.remove_wall(Wall.WEST)
-    cell.remove_wall(Wall.NORTH)
-    cell.remove_wall(Wall.EAST)
+    cell.remove_cell_wall(Wall.SOUTH)
+    cell.remove_cell_wall(Wall.WEST)
+    cell.remove_cell_wall(Wall.NORTH)
+    cell.remove_cell_wall(Wall.EAST)
     print("Cell - All walls removed,  expected:  0, actual:", cell)
 
     print("\n==== Remove multiple Wall Test =====")
     cell = Cell(0, 0)
-    cell.remove_wall(Wall.SOUTH)
-    cell.remove_wall(Wall.WEST)
+    cell.remove_cell_wall(Wall.SOUTH)
+    cell.remove_cell_wall(Wall.WEST)
     print(
         "Cell - South and West walls removed, expected:  0011, actual:", cell
     )
 
     cell = Cell(0, 0)
-    cell.remove_wall(Wall.EAST)
-    cell.remove_wall(Wall.WEST)
+    cell.remove_cell_wall(Wall.EAST)
+    cell.remove_cell_wall(Wall.WEST)
     print(
         "Cell - East and West walls removed,  expected:  0101, actual:", cell
     )
 
     cell = Cell(0, 0)
-    cell.remove_wall(Wall.NORTH)
-    cell.remove_wall(Wall.EAST)
+    cell.remove_cell_wall(Wall.NORTH)
+    cell.remove_cell_wall(Wall.EAST)
     print(
         "Cell - South and West walls removed, expected:  1100, actual:", cell
     )
@@ -134,5 +169,5 @@ if __name__ == "__main__":
     print("\n==== Visited Wall Test =====")
     cell = Cell(0, 0)
     print("Cell - Not visited, actual:", cell)
-    cell.visit(True)
+    cell.visited = True
     print("Cell - Visited, actual:", cell)

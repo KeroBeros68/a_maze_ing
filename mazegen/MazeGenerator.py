@@ -46,13 +46,14 @@ class MazeGenerator:
         """Initialize MazeGenerator with configuration parameters.
 
         Args:
-            config: ConfigModel instance containing:
-                - WIDTH: Maze width
-                - HEIGHT: Maze height
-                - ENTRY: Entry coordinates (x, y)
-                - EXIT: Exit coordinates (x, y)
-                - ALGORITHM: Algorithm name (default: "backtracking")
-                - SEED: Random seed for generation
+            width: Width of the maze
+            height: Height of the maze
+            entry: Entry coordinates as tuple (x, y)
+            exit: Exit coordinates as tuple (x, y)
+            output_file: Path to the output file
+            seed: Random seed for reproducible generation (None for random)
+            algorithm: Name of the algorithm to use (default: "backtracking")
+            mode_gen: Generation mode ("normal" or "animated")
 
         Raises:
             ValueError: If the specified algorithm is not registered
