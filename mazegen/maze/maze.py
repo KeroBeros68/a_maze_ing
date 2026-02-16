@@ -145,6 +145,9 @@ class Maze:
             result.append("".join(row_str))
         return "\n".join(result)
 
+    def __len__(self) -> int:
+        return self.__width * self.__height
+
 
 if __name__ == "__main__":
     maze = Maze(10, 10, (0, 0), (1, 1))
