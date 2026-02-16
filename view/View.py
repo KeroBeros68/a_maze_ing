@@ -13,6 +13,7 @@ from typing import List, Optional
 
 from mazegen.maze.maze import Maze
 from view.utils.Colors import ColorsTty
+from model import ConfigModel
 
 
 class View(ABC):
@@ -25,16 +26,17 @@ class View(ABC):
         __color: Current color setting for the display
     """
 
-    def __init__(self) -> None:
+    def __init__(self, config: ConfigModel) -> None:
         """Initialize the view with default colors settings."""
         self.__color_list: Optional[List[ColorsTty]] = None
         self.__active_color: Optional[ColorsTty] = None
         self.__entry_color: Optional[ColorsTty] = None
         self.__exit_color: Optional[ColorsTty] = None
         self.__closed_color: Optional[ColorsTty] = None
+        self.__config: ConfigModel = config
 
     @abstractmethod
-    def render(self, maze: Maze, speed: int) -> None:
+    def render(self, maze: Maze, speed: int, count_as_step: Optional[int] = 1) -> None:
         """Render the maze to the display.
 
         Args:

@@ -11,6 +11,7 @@ from typing import List, Optional
 from mazegen.cell.cell import Cell
 from mazegen.maze.maze import Maze
 from view.utils.Colors import ColorsTty
+from model import ConfigModel
 from ..View import View
 
 
@@ -21,7 +22,7 @@ class BasicView(View):
     with visible walls. Shows generation progress and current active cell.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, config: ConfigModel) -> None:
         """Initialize the BasicView."""
         self.__color_list: Optional[List[ColorsTty]] = (
             ColorsTty.get_ordered_colors()
@@ -31,7 +32,7 @@ class BasicView(View):
         self.__exit_color: Optional[ColorsTty] = ColorsTty.EXIT
         self.__closed_color: Optional[ColorsTty] = ColorsTty.CLOSED
 
-    def render(self, maze: Maze, speed: int) -> None:
+    def render(self, maze: Maze, speed: int, count_as_step: Optional[int] = 1) -> None:
         """Render the maze to terminal output.
 
         Displays the maze grid, current speed, active cell position,

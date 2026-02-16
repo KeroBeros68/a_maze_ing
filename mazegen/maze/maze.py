@@ -49,6 +49,15 @@ class Maze:
         self.exit: Tuple[int, int] = exit
         self.__active_cell: Optional[Tuple[int, int]] = None
         self.__done_gen: bool = False
+        self.__restart: bool = False  #Logique à déplacer dans controler
+
+    @property
+    def restart(self) -> bool:
+        return self.__restart
+
+    @restart.setter
+    def restart(self, value: bool) -> None:
+        self.__restart = value
 
     @property
     def width(self) -> int:

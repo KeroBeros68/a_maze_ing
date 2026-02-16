@@ -38,6 +38,7 @@ class Cell:
         self.__y: int = y
         self.__visited: bool = False
         self.__locked: bool = False
+        self.__lock_code: str = " "
         self.__is_entry: bool = False
         self.__is_exit: bool = False
 
@@ -101,6 +102,22 @@ class Cell:
             value: Whether the cell is locked
         """
         self.__locked = value
+
+    @property
+    def lock_code(self) -> str:
+        if self.__locked is False:
+            return " "
+        else:
+            return self.__lock_code
+
+    @lock_code.setter
+    def lock_code(self, code: str)-> None:
+        if code != " ":
+            self.__locked = True
+            self.__lock_code = code
+        else:
+            self.__locked = False
+            self.__lock_code = " "
 
     @property
     def is_entry(self) -> bool:

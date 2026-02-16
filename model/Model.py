@@ -41,8 +41,8 @@ class ConfigModel(BaseSettings):
     """
     model_config = SettingsConfigDict(env_file="config.txt")
 
-    WIDTH: int = Field(..., ge=0, le=200, description="Width of the maze")
-    HEIGHT: int = Field(..., ge=0, le=200, description="Height of the maze")
+    WIDTH: int = Field(..., ge=2, le=200, description="Width of the maze")
+    HEIGHT: int = Field(..., ge=2, le=200, description="Height of the maze")
     ENTRY: Tuple[int, int] = Field(..., description="Entry coordinates (x, y)")
     EXIT: Tuple[int, int] = Field(..., description="Exit coordinates (x, y)")
     OUTPUT_FILE: str = Field(

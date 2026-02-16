@@ -9,6 +9,8 @@ Classes:
 """
 
 from view.View import View
+from model import ConfigModel
+
 
 
 class ViewFactory:
@@ -32,12 +34,14 @@ class ViewFactory:
         """
         if not cls.__view:
             from view.basic import BasicView
+            from view.tty import TtyView
             cls.__view = {
-                "basic": BasicView
+                "basic": BasicView,
+                "tty": TtyView
             }
 
     @classmethod
-    def create(cls, view_name: str) -> View:
+    def create(cls, view_name: str, config: ConfigModel) -> View:
         """Create a view instance by name.
 
         Args:
@@ -60,7 +64,7 @@ class ViewFactory:
             )
 
         view_class = cls.__view[view_name_lower]
-        return view_class()
+        return view_class(config)
 
     @classmethod
     def get_available_view(cls) -> list[str]:

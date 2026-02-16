@@ -17,6 +17,7 @@ from mazegen.maze.maze import Maze
 from model import ConfigModel
 from view import ViewFactory
 from view.basic import BasicView
+from view.tty import TtyView
 from view.View import View
 
 
@@ -49,15 +50,16 @@ class Controller:
             config.MODE_GEN,
         )
         self.__animation_speed = BASE_FPS
-        self.__display: View = BasicView()
+        self.__display: View =  TtyView(self.__config)
         self.__display_name = config.DISPLAY_MODE
         self.__maze: Optional[Maze] = None
         self.__pause = False
+        self.__restart = False  # to remove later
 
     def process(self) -> None:
         """Start listening to keyboard input via non-blocking poll."""
         try:
-            self.__display = ViewFactory.create(self.__display_name)
+            self.__display = ViewFactory.create(self.__display_name, self.__config)
         except ValueError as e:
             sys.stderr.write(f"Error: {e}\n")
             raise
@@ -82,22 +84,34 @@ class Controller:
         key = self.__control.poll()
         if key is not None:
             if key in ("r", "R"):  # Regenerate
+#                print("Regenerating maze...")
+                self.__maze.done_gen = False
+                self.__restart = True
                 self.generate_and_display_maze()
-            elif key in ("e", "E"):  # Regenerate
+            if key in ("e", "E"):  # Regenerate
                 self.__generator.generate_new_seed()
+                self.__maze.done_gen = False
+                self.__restart = True
                 self.generate_and_display_maze()
-            elif key in ("p", "P", " "):
+            if key in ("p", "P", " "):
                 self.__pause = not self.__pause
-            elif key in ("+"):
+                if self.__pause:
+                    self.__display.paused = 1
+                    if self.__config.DISPLAY_MODE == "tty":
+                        self.__display.render(self.__maze, self.__animation_speed, count_as_step = 0)
+                else:
+                    self.__display.paused = 0
+            if key in ("+"):
                 self.__more_speed()
-            elif key in ("-"):
+            if key in ("-"):
                 self.__less_speed()
-            elif key in ("c"):
+            if key in ("C", "c"):
                 self.__change_color(-1)
-            elif key in ("v"):
+            if key in ("V", "v"):
                 self.__change_color(1)
             elif key in ("\x1b", "q", "Q"):  # Escape
-                print("\nProgram stopped.")
+                if self.__config.DISPLAY_MODE != "tty":
+                    print("\nProgram stopped.")
                 self.__control.stop()
                 sys.exit(0)
 
@@ -118,7 +132,9 @@ class Controller:
                 self.key_control()
                 time.sleep(TIME_PAUSE)
             self.__maze = maze_state
+            self.__maze.restart = self.__restart
             self.__display.render(self.__maze, self.__animation_speed)
+            self.__restart = False
             animation_speed = 1 / self.__animation_speed
             self.__reactive_sleep(animation_speed)
 
@@ -150,7 +166,7 @@ class Controller:
 
     def __change_color(self, value: int) -> None:
         self.__display.change_color(value)
-        self.__display.render(self.__maze, self.__animation_speed)
+        self.__display.render(self.__maze, self.__animation_speed, count_as_step = 0)
 
     def __enter__(self) -> "Controller":
         return self

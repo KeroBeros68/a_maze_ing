@@ -10,6 +10,7 @@ import uuid
 from sys import stderr
 from typing import Tuple, Optional, Generator
 from mazegen.maze.maze import Maze
+from mazegen.stamp.Stamp import Stamp
 from mazegen.algorithms.factory import AlgorithmFactory
 
 
@@ -69,6 +70,7 @@ class MazeGenerator:
         self.maze: Maze = Maze(
             self.__width, self.__height, self.__entry, self.__exit
         )
+        self.stamp: Stamp = Stamp(self.maze)
 
     def generate_maze(self) -> Generator[Maze, None, None]:
         """Generate a maze using the configured algorithm.
@@ -85,6 +87,7 @@ class MazeGenerator:
             ValueError: If the algorithm is not found
         """
         self.maze.init_grid()
+        self.stamp.add_stamp()
         if self.__seed is None:
             self.generate_new_seed()
         random.seed(self.__seed)
