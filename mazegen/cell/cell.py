@@ -34,10 +34,12 @@ class Cell:
             y: Y coordinate in the maze grid
         """
         self.__wall: int = 0xF
-        self.__visited: bool = False
-        self.__locked: bool = False
         self.__x: int = x
         self.__y: int = y
+        self.__visited: bool = False
+        self.__locked: bool = False
+        self.__is_entry: bool = False
+        self.__is_exit: bool = False
 
     def remove_cell_wall(self, wall: Wall) -> None:
         """Remove a wall from the cell using bitwise AND operation.
@@ -55,6 +57,14 @@ class Cell:
             int: 4-bit integer where each bit represents a wall
         """
         return self.__wall
+
+    @property
+    def x(self) -> int:
+        return self.__x
+
+    @property
+    def y(self) -> int:
+        return self.__y
 
     @property
     def visited(self) -> bool:
@@ -91,6 +101,22 @@ class Cell:
             value: Whether the cell is locked
         """
         self.__locked = value
+
+    @property
+    def is_entry(self) -> bool:
+        return self.__is_entry
+
+    @is_entry.setter
+    def is_entry(self, value: bool) -> None:
+        self.__is_entry = value
+
+    @property
+    def is_exit(self) -> bool:
+        return self.__is_exit
+
+    @is_exit.setter
+    def is_exit(self, value: bool) -> None:
+        self.__is_exit = value
 
     def __str__(self) -> str:
         """Return detailed string representation of the cell.

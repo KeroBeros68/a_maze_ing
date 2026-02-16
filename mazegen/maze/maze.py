@@ -117,6 +117,13 @@ class Maze:
             [Cell(x, y) for x in range(self.__width)]
             for y in range(self.__height)
         ]
+        for row in self.maze_grid:
+            for cell in row:
+                coord_cell = (cell.x, cell.y)
+                if coord_cell == self.entry:
+                    cell.is_entry = True
+                elif coord_cell == self.exit:
+                    cell.is_exit = True
 
     def __str__(self) -> str:
         """Return a text-based visualization of the maze.

@@ -41,13 +41,14 @@ class BasicView(View):
             maze: The Maze object to render
             speed: Current animation speed in FPS
         """
-        print("\n \33[H Mon maze, speed:", speed, maze.active_cell)
+        print("\n\n\n\33[HMon maze, speed:",
+              speed, maze.active_cell)
+        print("\n\n\n")
         print(
-            self.__active_color.value,
             self.print_maze(maze),
             ColorsTty.RESET.value,
         )
-        print("\n Generation finished:", maze.done_gen)
+        print(f"\n Generation finished: {maze.done_gen} ")
 
     def change_color(self, new_color: int) -> None:
         """Change the display color based on direction.
@@ -79,13 +80,29 @@ class BasicView(View):
         Returns:
             str: Multi-line ASCII art string representing the cell with walls
         """
+        wall = f"{self.__active_color.value}▒▒"
+
+        if cell.is_entry:
+            center_cell = f"{ColorsTty.ENTRY.value}░░"
+        elif cell.is_exit:
+            center_cell = f"{ColorsTty.EXIT.value}░░"
+        elif cell.visited:
+            center_cell = f"{ColorsTty.WHITE.value}░░"
+        else:
+            center_cell = f"{self.__closed_color.value}░░"
+
+        if cell.visited:
+            path = f"{ColorsTty.WHITE.value}░░"
+        else:
+            path = f"{self.__closed_color.value}░░"
+
         return "\n".join(
             [
-                f"▒▒{'▒▒' if cell.wall & 0b0001 else '░░'}▒▒",
-                f"{'▒▒' if cell.wall & 0b1000 else '░░'}"
-                f"░░"
-                f"{'▒▒' if cell.wall & 0b0010 else '░░'}",
-                f"▒▒{'▒▒' if cell.wall & 0b0100 else '░░'}▒▒",
+                f"{wall}{wall if cell.wall & 0b0001 else path}{wall}",
+                f"{wall if cell.wall & 0b1000 else path}"
+                f"{center_cell}"
+                f"{wall if cell.wall & 0b0010 else path}",
+                f"{wall}{wall if cell.wall & 0b0100 else path}{wall}",
             ]
         )
 
@@ -100,7 +117,7 @@ class BasicView(View):
         """
         result = ""
         for row in maze.maze_grid:
-            row_str = ["", "", ""]
+            row_str = ["            ", "            ", "            "]
             for x, cell in enumerate(row):
                 cell_view = self.view_cell(cell).splitlines()
                 for i in range(3):

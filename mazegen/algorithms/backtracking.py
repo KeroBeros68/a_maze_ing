@@ -39,6 +39,7 @@ class BacktrackingAlgorithm(MazeAlgorithm):
         def _generate() -> Generator[Maze, None, None]:
             """Internal generator that yields maze states."""
             nonlocal maze
+            maze.done_gen = False
             while stack:
                 x1, y1 = stack[len(stack) - 1]
                 maze.maze_grid[y1][x1].visited = True
