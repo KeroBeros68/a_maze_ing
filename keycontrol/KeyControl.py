@@ -21,6 +21,7 @@ from typing import Any, Optional
 
 # ANSI escape codes
 CURSOR_SHOW = "\33[?25h"
+COLOR_RESET = "\33[48;2;0;0;0m\33[37m"
 RESET_FORMATTING = "\33[0m"
 
 
@@ -95,7 +96,7 @@ class TerminalManager:
             os.system("stty sane")
 
         # Show cursor and reset formatting
-        sys.stdout.write(f"{CURSOR_SHOW}{RESET_FORMATTING}\n")
+        sys.stdout.write(f"{CURSOR_SHOW}{COLOR_RESET}{RESET_FORMATTING}\n")
         sys.stdout.flush()
 
 

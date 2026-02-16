@@ -57,6 +57,13 @@ class BacktrackingAlgorithm(MazeAlgorithm):
                     stack.append((x1, y1))
                 except Exception:
                     stack.pop()
+                    if animate:
+                        try:
+                            maze.active_cell = stack[len(stack) - 1]
+                        except IndexError:
+                            maze.active_cell = (entry_x, entry_y)
+                        yield maze
+
             # Always yield the final maze
             maze.done_gen = True
             yield maze

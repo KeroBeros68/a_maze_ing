@@ -64,7 +64,7 @@ class Controller:
             sys.stderr.write(f"Error: {e}\n")
             raise
         self.__control.start()
-        print("\33[2J")
+        print("\33[48;2;0;0;0m\33[2J")
         self.generate_and_display_maze()
         while True:
             self.key_control()

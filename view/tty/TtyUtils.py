@@ -194,6 +194,7 @@ class Canvas:
         if code == 15:
             self.add_block(x, y, Elements.CLOSED_CELL, ansi_closed)
             return
+        self.add_block(x, y, Elements.BLANK_CELL, ansi)
         self.add_block(x, y, "▀", ansi)
         self.add_block(x + 5, y, "▀", ansi)
         self.add_block(x, y + 2, "▄", ansi)
@@ -244,11 +245,11 @@ class Canvas:
         dr = max(0, min(255, dr))
         dg = max(0, min(255, dg))
         db = max(0, min(255, db))
-        gr = ""
+        gr = "\33[48;2;0;0;0m"
         if lit == 1:
-            gr = "\33[48;5;234m"
+            gr = "\33[48;2;32;32;32m"
         if lit == 2:
-            gr = "\33[48;5;238m"
+            gr = "\33[48;2;64;64;64m"
         if inv is True:
             ansi = f"\33[38;2;0;0;0m\33[48;2;{dr};{dg};{db}m"
         if bright is True:
@@ -260,7 +261,8 @@ class Canvas:
             ansi = f"\33[38;2;{dr};{dg};{db}m{gr}"
         return ansi
 
-    def render_canvas(self, reset_each_cell: bool = True) -> str:
+    def render_canvas(self, reset_each_cell: bool = False) -> str:
+        current_color = ""
         lines: List[str] = []
         if reset_each_cell:
             for y in range(self.height):
@@ -273,7 +275,7 @@ class Canvas:
                         rows_in_line.append(f"{cell.color}{cell.ch}{Colors.RESET}")
                     else:
                         rows_in_line.append(cell.ch)
-                lines.append("".join(rows_in_line))
+                lines.append("".join(rows_in_line) + Colors.RESET)
         else:
             for y in range(self.height):
                 rows_in_line = []
@@ -281,11 +283,12 @@ class Canvas:
                     cell = self._grid[y][x]
                     if cell.cont:
                         continue
-                    if cell.color:
+                    if cell.color and cell.color != current_color:
                         rows_in_line.append(f"{cell.color}{cell.ch}")
+                        current_color = cell.color
                     else:
                         rows_in_line.append(cell.ch)
-                lines.append("".join(rows_in_line) + Colors.RESET)
+                lines.append("".join(rows_in_line))
         return "\n".join(lines)
 
     def print_canvas(self) -> None:

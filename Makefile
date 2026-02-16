@@ -26,11 +26,16 @@ SRC_MYPY = a_maze_ing.py \
 	   mazegen/algorithms/factory.py \
 	   mazegen/cell/cell.py \
 	   mazegen/maze/maze.py \
+	   mazegen/stamp/Stamp.py \
+	   mazegen/stamp/StampConsts.py \
 	   mazegen/utils/utils.py \
 	   model/Model.py \
 	   view/View.py \
 	   view/ViewFactory.py \
-	   view/basic/BasicView.py
+	   view/basic/BasicView.py \
+	   view/tty/TtyView.py \
+	   view/tty/TtyConsts.py \
+	   view/tty/TtyUtils.py
 
 # **************************************************************************** #
 #									Rules									   #
