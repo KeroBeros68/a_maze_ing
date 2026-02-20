@@ -42,7 +42,9 @@ class MazeGenerator:
         output_file: str,
         seed: Optional[str],
         algorithm: str,
+        perfect: bool,
         mode_gen: str,
+        logo_type: str,
     ):
         """Initialize MazeGenerator with configuration parameters.
 
@@ -66,11 +68,13 @@ class MazeGenerator:
         self.__output_file = output_file
         self.__seed = seed
         self.__algorithm_name = algorithm
+        self.__perfect = perfect
         self.__mode_gen = mode_gen
+        self.__logo_type = logo_type
         self.maze: Maze = Maze(
-            self.__width, self.__height, self.__entry, self.__exit
-        )
-        self.stamp: Stamp = Stamp(self.maze)
+            self.__width, self.__height, self.__entry, self.__exit,
+            self.__perfect)
+        self.stamp: Stamp = Stamp(self.maze, self.__logo_type)
 
     def generate_maze(self) -> Generator[Maze, None, None]:
         """Generate a maze using the configured algorithm.
@@ -87,10 +91,10 @@ class MazeGenerator:
             ValueError: If the algorithm is not found
         """
         self.maze.init_grid()
-        self.stamp.add_stamp()
         if self.__seed is None:
             self.generate_new_seed()
         random.seed(self.__seed)
+        self.stamp.add_stamp()
 
         # Get algorithm from factory
         try:
@@ -124,10 +128,14 @@ class MazeGenerator:
                 file.write(self.maze.__str__())
                 file.write("\n\n")
                 file.write(f"{x},{y}\n")
-                file.write(f"{x1},{y1}")
+                file.write(f"{x1},{y1}\n")
+                file.write(self.maze.shortest_path)
         except (FileNotFoundError, PermissionError) as e:
             stderr.write(f"Error writing file: {str(e)}\n")
 
     def generate_new_seed(self) -> None:
         """Generate a random seed as a hex string."""
         self.__seed = uuid.uuid4().hex
+
+    def get_seed(self) -> str | None:
+        return self.__seed

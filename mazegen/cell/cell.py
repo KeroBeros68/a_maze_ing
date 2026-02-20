@@ -37,6 +37,7 @@ class Cell:
         self.__x: int = x
         self.__y: int = y
         self.__visited: bool = False
+        self.__visited_since: int = 0
         self.__locked: bool = False
         self.__lock_code: str = " "
         self.__is_entry: bool = False
@@ -86,6 +87,14 @@ class Cell:
         self.__visited = value
 
     @property
+    def visited_since(self) -> int:
+        return self.__visited_since
+
+    @visited_since.setter
+    def visited_since(self, value: int) -> None:
+        self.__visited_since = value
+
+    @property
     def locked(self) -> bool:
         """Check if this cell is locked.
 
@@ -111,7 +120,7 @@ class Cell:
             return self.__lock_code
 
     @lock_code.setter
-    def lock_code(self, code: str)-> None:
+    def lock_code(self, code: str) -> None:
         if code != " ":
             self.__locked = True
             self.__lock_code = code

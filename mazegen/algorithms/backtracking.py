@@ -5,10 +5,10 @@ for generating perfect mazes. It carves passages by removing walls
 between adjacent unvisited cells.
 """
 
-import random
 from typing import Generator
 from mazegen.maze.maze import Maze
 from mazegen.algorithms.algorithm import MazeAlgorithm
+from mazegen.algorithms.unperfect import UnPerfect
 
 
 class BacktrackingAlgorithm(MazeAlgorithm):
@@ -34,14 +34,14 @@ class BacktrackingAlgorithm(MazeAlgorithm):
         Returns:
             Generator yielding Maze states at each step.
         """
-        stack = [(entry_x, entry_y)]
+        stack = [(entry_x, entry_y, 0)]
 
         def _generate() -> Generator[Maze, None, None]:
             """Internal generator that yields maze states."""
             nonlocal maze
-            maze.done_gen = False
+            maze.gen_step = 1
             while stack:
-                x1, y1 = stack[len(stack) - 1]
+                x1, y1, _ = stack[len(stack) - 1]
                 maze.maze_grid[y1][x1].visited = True
                 if animate:
                     maze.active_cell = stack[len(stack) - 1]
@@ -51,35 +51,28 @@ class BacktrackingAlgorithm(MazeAlgorithm):
                     x2, y2 = target
                     maze = self.remove_wall(x1, y1, x2, y2, maze)
                     if animate:
-                        maze.active_cell = target
+                        tx, ty = target
+                        maze.active_cell = tx, ty, 0
                         yield maze
                     x1, y1 = x2, y2
-                    stack.append((x1, y1))
+                    stack.append((x1, y1, 0))
                 except Exception:
                     stack.pop()
                     if animate:
                         try:
                             maze.active_cell = stack[len(stack) - 1]
                         except IndexError:
-                            maze.active_cell = (entry_x, entry_y)
+                            maze.active_cell = (entry_x, entry_y, 0)
                         yield maze
 
+            maze.gen_step = 2
+            if maze.perfect is False:
+                algo = UnPerfect()
+                yield from algo.generate(maze, 0, 0, animate)
+            else:
+                maze.gen_step = 3
+
             # Always yield the final maze
-            maze.done_gen = True
             yield maze
 
         return _generate()
-
-
-if __name__ == "__main__":
-    initial_maze = Maze(10, 10, (5, 0), (9, 9))
-    initial_maze.init_grid()
-    x, y = initial_maze.entry
-    random.seed(42)
-    algorithm = BacktrackingAlgorithm()
-    generator = algorithm.generate(initial_maze, x, y)
-    # Consume the generator to get the final maze
-    final_maze: Maze = initial_maze
-    for final_maze in generator:
-        pass
-    print(final_maze)

@@ -19,7 +19,7 @@ class ColorsTty(Enum):
     RESET = "\33[0;1;37m"
 
     @classmethod
-    def get_ordered_colors(cls):
+    def get_ordered_colors(cls) -> list:
         """Retourne une liste ordonnée de couleurs spécifiques
         (excluant RESET, CLOSED, ENTRY, EXIT)."""
         excluded = {"RESET", "CLOSED", "ENTRY", "EXIT"}

@@ -6,7 +6,6 @@ initialization and text-based visualization.
 """
 
 from typing import Optional, Tuple
-from mazegen.utils.utils import Wall
 from mazegen.cell.cell import Cell
 
 
@@ -33,6 +32,7 @@ class Maze:
         height: int,
         entry: Tuple[int, int],
         exit: Tuple[int, int],
+        perfect: bool,
     ):
         """Initialize a maze with given dimensions and entry/exit points.
 
@@ -47,9 +47,11 @@ class Maze:
         self.__height: int = height
         self.entry: Tuple[int, int] = entry
         self.exit: Tuple[int, int] = exit
-        self.__active_cell: Optional[Tuple[int, int]] = None
-        self.__done_gen: bool = False
-        self.__restart: bool = False  #Logique à déplacer dans controler
+        self.__perfect = perfect
+        self.__active_cell: Optional[Tuple[int, int, int]] = None
+        self.__gen_step: int = 0
+        self.shortest_path: str = ""
+        self.__restart: bool = False  # Logique à déplacer dans controler
 
     @property
     def restart(self) -> bool:
@@ -78,27 +80,45 @@ class Maze:
         return self.__height
 
     @property
-    def active_cell(self) -> Optional[Tuple[int, int]]:
+    def perfect(self) -> bool:
+        """Get the perfect status.
+
+        Returns:
+            True is maze is perfect, else False
+        """
+        return self.__perfect
+
+    @perfect.setter
+    def perfect(self, value: bool) -> None:
+        """Set the perfect status.
+
+        Args:
+            value: True if maze is perfect, else False
+        """
+        self.__perfect = value
+
+    @property
+    def active_cell(self) -> Optional[Tuple[int, int, int]]:
         """Get the currently active cell coordinates.
 
         Returns:
-            Optional[Tuple[int, int]]: Coordinates (x, y) of the active cell,
-            or None if no cell is active
+            Optional[Tuple[int, int]]: Coordinates (x, y, misc) of the active
+            cell, or None if no cell is active
         """
         return self.__active_cell
 
     @active_cell.setter
-    def active_cell(self, value: Optional[Tuple[int, int]]) -> None:
+    def active_cell(self, value: Optional[Tuple[int, int, int]]) -> None:
         """Set the currently active cell coordinates.
 
         Args:
-            value: Tuple (x, y) for the active cell coordinates,
+            value: Tuple (x, y, misc) for the active cell coordinates,
             or None to clear
         """
         self.__active_cell = value
 
     @property
-    def done_gen(self) -> bool:
+    def gen_step(self) -> int:
         """Check if maze generation is complete.
 
         Returns:
@@ -106,8 +126,8 @@ class Maze:
         """
         return self.__done_gen
 
-    @done_gen.setter
-    def done_gen(self, value: bool) -> None:
+    @gen_step.setter
+    def gen_step(self, value: int) -> None:
         """Mark generation as complete or incomplete.
 
         Args:
@@ -156,12 +176,3 @@ class Maze:
 
     def __len__(self) -> int:
         return self.__width * self.__height
-
-
-if __name__ == "__main__":
-    maze = Maze(10, 10, (0, 0), (1, 1))
-    maze.init_grid()
-    print(maze)
-    maze.maze_grid[1][0].remove_wall(Wall.EAST)
-    print(maze.maze_grid[1][0])
-    print(maze)

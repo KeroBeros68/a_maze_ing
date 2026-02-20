@@ -34,9 +34,12 @@ class View(ABC):
         self.__exit_color: Optional[ColorsTty] = None
         self.__closed_color: Optional[ColorsTty] = None
         self.__config: ConfigModel = config
+        self.paused = False
 
     @abstractmethod
-    def render(self, maze: Maze, speed: int, count_as_step: Optional[int] = 1) -> None:
+    def render(self, maze: Maze, speed: int, algo: str,
+               seed: Optional[str] = "",
+               count_as_step: Optional[int] = 1) -> None:
         """Render the maze to the display.
 
         Args:

@@ -75,7 +75,7 @@ class MazeAlgorithm(ABC):
             if 0 <= vx < maze.width
             and 0 <= vy < maze.height
             and not maze.maze_grid[vy][vx].visited
-            and maze.maze_grid[vy][vx].locked == False
+            and maze.maze_grid[vy][vx].locked is False
         ]
 
         return random.choice(valid_target)

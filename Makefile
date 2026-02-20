@@ -99,7 +99,7 @@ lint-strict:
 clean:
 	printf "$(CYAN)Suppression de __pycache__...$(RESET) "
 	if [ -d "__pycache__" ]; then \
-		rm -rf __pycache__ && \
+		rm -r -f __pycache__ && \
 		echo "$(GREEN)✓ Dossier __pycache__ supprimés$(RESET)"; \
 	else \
 		echo "$(YELLOW)⚠ Rien à nettoyer$(RESET)"; \

@@ -7,7 +7,7 @@ Classes:
     BasicView: Text-based maze renderer
 """
 
-from typing import List, Optional
+from typing import Optional
 from mazegen.cell.cell import Cell
 from mazegen.maze.maze import Maze
 from view.utils.Colors import ColorsTty
@@ -24,15 +24,17 @@ class BasicView(View):
 
     def __init__(self, config: ConfigModel) -> None:
         """Initialize the BasicView."""
-        self.__color_list: Optional[List[ColorsTty]] = (
+        self.__color_list: list[ColorsTty] = (
             ColorsTty.get_ordered_colors()
         )
-        self.__active_color: Optional[ColorsTty] = self.__color_list[0]
-        self.__entry_color: Optional[ColorsTty] = ColorsTty.ENTRY
-        self.__exit_color: Optional[ColorsTty] = ColorsTty.EXIT
-        self.__closed_color: Optional[ColorsTty] = ColorsTty.CLOSED
+        self.__active_color: ColorsTty = self.__color_list[0]
+        self.__entry_color: ColorsTty = ColorsTty.ENTRY
+        self.__exit_color: ColorsTty = ColorsTty.EXIT
+        self.__closed_color: ColorsTty = ColorsTty.CLOSED
 
-    def render(self, maze: Maze, speed: int, count_as_step: Optional[int] = 1) -> None:
+    def render(self, maze: Maze, speed: int, algo: str,
+               seed: Optional[str] = "",
+               count_as_step: Optional[int] = 1) -> None:
         """Render the maze to terminal output.
 
         Displays the maze grid, current speed, active cell position,
@@ -49,7 +51,8 @@ class BasicView(View):
             self.print_maze(maze),
             ColorsTty.RESET.value,
         )
-        print(f"\n Generation finished: {maze.done_gen} ")
+        print("\n Generation finished: "
+              f"{True if maze.gen_step > 1 else False}")
 
     def change_color(self, new_color: int) -> None:
         """Change the display color based on direction.

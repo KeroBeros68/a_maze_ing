@@ -38,6 +38,7 @@ class ConfigModel(BaseSettings):
         SEED: Random seed for reproducible generation
         MODE_GEN: Generation mode ("normal" or "animated")
         DISPLAY_MODE: Display mode ("basic", "tty", or "mlx")
+        LOGO_TYPE: Logo type ("vanilla" or "custom")
     """
     model_config = SettingsConfigDict(env_file="config.txt")
 
@@ -48,7 +49,7 @@ class ConfigModel(BaseSettings):
     OUTPUT_FILE: str = Field(
         ..., min_length=4, max_length=15, description="Output file name"
     )
-    PERFECT: bool = Field(default=False, description="Generate a perfect maze")
+    PERFECT: bool = Field(default=True, description="Generate a perfect maze")
     ALGORITHM: str = Field(
         default="backtracking", description="Maze generation algorithm to use"
     )
@@ -64,6 +65,9 @@ class ConfigModel(BaseSettings):
     )
     DISPLAY_MODE: str = Field(
         default="basic", description="Display mode (basic, tty, mlx)"
+    )
+    LOGO_TYPE: str = Field(
+        default="vanilla", description="Logo type (vanilla, custom)"
     )
 
     @model_validator(mode="after")

@@ -9,6 +9,7 @@ class Colors:
     BLUE42 = "\33[38;2;16;32;96m\33[48;2;0;0;0m"
     DEEP_PURPLE = "\33[38;2;54;18;72m\33[48;2;0;0;0m"
     DEEP_BROWN = "\33[38;2;60;45;30m\33[48;2;0;0;0m"
+    DARK_BROWN = "\33[38;2;30;22;15m\33[48;2;0;0;0m"
     CLOSED = "\33[38;2;32;16;8m\33[48;2;0;0;0m"
     ENTRY = "\33[38;5;45m\33[48;2;0;0;0m"
     EXIT = "\33[38;5;208m\33[48;2;0;0;0m"
@@ -45,7 +46,7 @@ class Banners:
         "╱▁╱  │▁│      ╱▁╱  ╱▁╱╲▁▁▁▁╱ ╱▁▁▁╱╲▁▁▁╱       ╱▁╱▁╱ ╱▁╱╲▁▁  ╱  ",
         "                                                      ╱▁▁▁▁╱   ",
     ]
-    SIGNATURE_BANNER = "   42 - orobert & kebertra - 2025"
+    SIGNATURE_BANNER = "   42 - orobert & kebertra - 2026"
     SIGNATURE_COLORS = "000660305555555030555555550306666"
 
 
@@ -54,19 +55,25 @@ class Panels:
         " Space/P : Pause            ",
         " +/-     : Speed            ",
         " C/V     : Color            ",
+        " R       : Recreate Maze    ",
+        " E       : Regenerate Seed  ",
         " ESC/Q   : Exit             ",
     ]
     LEFT_PANEL = [
         " F       : Show path        ",
-        " R       : Regenerate       ",
+        "                            ",
         " C/V     : Color            ",
+        " R       : Regen same Maze  ",
+        " E       : Regen Seed+Maze  ",
         " ESC/Q   : Exit             ",
     ]
     RIGHT_PANEL = [
-        " Maze size :                ",
-        " 🚪 Entry  :                ",
-        " 👑 Exit   :                ",
-        " Perfect   :                ",
+        " Size    :                  ",
+        " 🚪Entry :                  ",
+        "   Exit  :                  ",
+        " Perfect :                  ",
+        " Seed    :                  ",
+        "                            ",
     ]
 
 
@@ -88,9 +95,9 @@ class Elements:
     ]
     DECO_FILL = [
         "──┘ │ ├─",
-        "┌─╴ ╵ │ ",
-        "│ ┌─╴ ╵ ",
-        "└─┤ ┌─┐ ",
+        "┌─┐ ╵ │ ",
+        "╵ ├─╴ ╵ ",
+        "╴ │ ┌─┬─",
     ]
 
 
@@ -119,4 +126,14 @@ class FortyTwoBrick:
         "█████▀",
         "███▀  ",
         "█▀    ",
+    ]
+    R = [
+        "█▄    ",
+        "███▄  ",
+        "█████▄",
+    ]
+    L = [
+        "▀█████",
+        "  ▀███",
+        "    ▀█",
     ]

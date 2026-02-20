@@ -12,7 +12,6 @@ from view.View import View
 from model import ConfigModel
 
 
-
 class ViewFactory:
     """Factory for creating view instances.
 

@@ -10,14 +10,14 @@ Classes:
 
 import time
 import sys
-from typing import Optional
 from mazegen.MazeGenerator import MazeGenerator
 from keycontrol import KeyControl, TerminalManager
 from mazegen.maze.maze import Maze
+from pathfinder.pathfinder import PathFinder
 from model import ConfigModel
 from view import ViewFactory
-from view.basic import BasicView
-from view.tty import TtyView
+from view.basic import BasicView  # noqa F401
+from view.tty import TtyView  # noqa F401
 from view.View import View
 
 
@@ -47,25 +47,29 @@ class Controller:
             config.OUTPUT_FILE,
             config.SEED,
             config.ALGORITHM,
+            config.PERFECT,
             config.MODE_GEN,
+            config.LOGO_TYPE,
         )
         self.__animation_speed = BASE_FPS
-        self.__display: View =  TtyView(self.__config)
+        self.__display: View = TtyView(self.__config)
         self.__display_name = config.DISPLAY_MODE
-        self.__maze: Optional[Maze] = None
+        self.__algorithm = config.ALGORITHM
         self.__pause = False
         self.__restart = False  # to remove later
 
     def process(self) -> None:
         """Start listening to keyboard input via non-blocking poll."""
         try:
-            self.__display = ViewFactory.create(self.__display_name, self.__config)
+            self.__display = ViewFactory.create(self.__display_name,
+                                                self.__config)
         except ValueError as e:
             sys.stderr.write(f"Error: {e}\n")
             raise
         self.__control.start()
         print("\33[48;2;0;0;0m\33[2J")
         self.generate_and_display_maze()
+        self.solve_path()
         while True:
             self.key_control()
             time.sleep(0.01)
@@ -84,23 +88,27 @@ class Controller:
         key = self.__control.poll()
         if key is not None:
             if key in ("r", "R"):  # Regenerate
-#                print("Regenerating maze...")
-                self.__maze.done_gen = False
+                self.__maze.gen_step = 0
                 self.__restart = True
                 self.generate_and_display_maze()
             if key in ("e", "E"):  # Regenerate
                 self.__generator.generate_new_seed()
-                self.__maze.done_gen = False
+                self.__maze.gen_step = 0
                 self.__restart = True
                 self.generate_and_display_maze()
+                self.pathfinder.solve_shortest_path(self.__maze)
             if key in ("p", "P", " "):
                 self.__pause = not self.__pause
                 if self.__pause:
-                    self.__display.paused = 1
+                    self.__display.paused = True
                     if self.__config.DISPLAY_MODE == "tty":
-                        self.__display.render(self.__maze, self.__animation_speed, count_as_step = 0)
+                        self.__display.render(self.__maze,
+                                              self.__animation_speed,
+                                              self.__algorithm,
+                                              self.__generator.get_seed(),
+                                              count_as_step=0)
                 else:
-                    self.__display.paused = 0
+                    self.__display.paused = False
             if key in ("+"):
                 self.__more_speed()
             if key in ("-"):
@@ -109,6 +117,14 @@ class Controller:
                 self.__change_color(-1)
             if key in ("V", "v"):
                 self.__change_color(1)
+            if (key in ("F", "f")
+               and self.__maze.gen_step >= 3
+               and self.__maze.gen_step != 4):
+                self.__maze.gen_step = 4
+                self.__display.render(self.__maze, self.__animation_speed,
+                                      self.__algorithm,
+                                      self.__generator.get_seed(),
+                                      count_as_step=0)
             elif key in ("\x1b", "q", "Q"):  # Escape
                 if self.__config.DISPLAY_MODE != "tty":
                     print("\nProgram stopped.")
@@ -131,9 +147,11 @@ class Controller:
             while self.__pause:
                 self.key_control()
                 time.sleep(TIME_PAUSE)
-            self.__maze = maze_state
+            self.__maze: Maze = maze_state
             self.__maze.restart = self.__restart
-            self.__display.render(self.__maze, self.__animation_speed)
+            self.__display.render(self.__maze, self.__animation_speed,
+                                  self.__algorithm,
+                                  self.__generator.get_seed())
             self.__restart = False
             animation_speed = 1 / self.__animation_speed
             self.__reactive_sleep(animation_speed)
@@ -166,7 +184,13 @@ class Controller:
 
     def __change_color(self, value: int) -> None:
         self.__display.change_color(value)
-        self.__display.render(self.__maze, self.__animation_speed, count_as_step = 0)
+        self.__display.render(self.__maze, self.__animation_speed,
+                              self.__algorithm,
+                              self.__generator.get_seed(), count_as_step=0)
+
+    def solve_path(self) -> None:
+        self.pathfinder = PathFinder()
+        self.pathfinder.solve_shortest_path(self.__maze)
 
     def __enter__(self) -> "Controller":
         return self
