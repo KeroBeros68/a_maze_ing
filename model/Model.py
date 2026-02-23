@@ -60,8 +60,8 @@ class ConfigModel(BaseSettings):
         description="Seed generation",
     )
     MODE_GEN: str = Field(
-        default="normal",
-        description="Generation mode: " "'normal' or 'animated'",
+        default="static",
+        description="Generation mode: " "'static' or 'animated'",
     )
     DISPLAY_MODE: str = Field(
         default="basic", description="Display mode (basic, tty, mlx)"

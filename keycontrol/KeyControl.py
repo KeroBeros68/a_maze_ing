@@ -42,7 +42,7 @@ class TerminalManager:
 
     def __init__(self) -> None:
         self.fd: Optional[int] = None
-        self.old: Optional[list] = None
+        self.old: Optional[list[Any]] = None
         # Register cleanup to run on program exit (crash, exception, etc.)
         atexit.register(self.cleanup)
 

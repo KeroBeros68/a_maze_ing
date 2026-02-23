@@ -39,12 +39,12 @@ class Banners:
         " Kero ",
     ]
     CENTER_BANNER = [
-        "    ▁▁▁           ▁▁  ▁▁▁                         ▁▁           ",
-        "   ╱   │         ╱  │╱  ╱▁▁▁▁▁▁▁▁▁  ▁▁▁          ╱▁╱▁▁▁  ▁▁▁▁▁▁",
-        "  ╱ ╱│ │ ▁▁▁▁▁▁ ╱ ╱│▁╱ ╱ ▁▁  ╱▁  ╱ ╱ ▁ ╲ ▁▁▁▁▁▁ ╱ ╱ ▁▁ ╲╱ ▁▁  ╱",
-        " ╱ ▁▁▁ │╱▁▁▁▁▁╱╱ ╱  ╱ ╱ ╱▁╱ ╱ ╱ ╱▁╱  ▁▁╱╱▁▁▁▁▁╱╱ ╱ ╱ ╱ ╱ ╱▁╱ ╱ ",
-        "╱▁╱  │▁│      ╱▁╱  ╱▁╱╲▁▁▁▁╱ ╱▁▁▁╱╲▁▁▁╱       ╱▁╱▁╱ ╱▁╱╲▁▁  ╱  ",
-        "                                                      ╱▁▁▁▁╱   ",
+        "     ▁▁▁           ▁▁  ▁▁▁                         ▁▁            ",
+        "    ╱   │         ╱  │╱  ╱▁▁▁▁▁▁▁▁▁  ▁▁▁          ╱▁╱▁▁▁  ▁▁▁▁▁▁ ",
+        "   ╱ ╱│ │ ▁▁▁▁▁▁ ╱ ╱│▁╱ ╱ ▁▁  ╱▁  ╱ ╱ ▁ ╲ ▁▁▁▁▁▁ ╱ ╱ ▁▁ ╲╱ ▁▁  ╱ ",
+        "  ╱ ▁▁▁ │╱▁▁▁▁▁╱╱ ╱  ╱ ╱ ╱▁╱ ╱ ╱ ╱▁╱  ▁▁╱╱▁▁▁▁▁╱╱ ╱ ╱ ╱ ╱ ╱▁╱ ╱  ",
+        " ╱▁╱  │▁│      ╱▁╱  ╱▁╱╲▁▁▁▁╱ ╱▁▁▁╱╲▁▁▁╱       ╱▁╱▁╱ ╱▁╱╲▁▁  ╱   ",
+        "                                                       ╱▁▁▁▁╱    ",
     ]
     SIGNATURE_BANNER = "   42 - orobert & kebertra - 2026"
     SIGNATURE_COLORS = "000660305555555030555555550306666"
@@ -57,15 +57,23 @@ class Panels:
         " C/V     : Color            ",
         " R       : Recreate Maze    ",
         " E       : Regenerate Seed  ",
-        " ESC/Q   : Exit             ",
+        " ESC     : Exit             ",
     ]
     LEFT_PANEL = [
-        " F       : Show path        ",
-        "                            ",
+        " F       : Show/Hide Path   ",
+        " G       : Game on, Garth!  ",
         " C/V     : Color            ",
         " R       : Regen same Maze  ",
         " E       : Regen Seed+Maze  ",
-        " ESC/Q   : Exit             ",
+        " ESC     : Exit             ",
+    ]
+    GAME_PANEL = [
+        " W/A/S/D : Movement         ",
+        " G       : Back to Serious  ",
+        " C/V     : Color            ",
+        " R       : Regen same Maze  ",
+        " E       : Regen Seed+Maze  ",
+        " ESC     : Exit             ",
     ]
     RIGHT_PANEL = [
         " Size    :                  ",
@@ -74,6 +82,16 @@ class Panels:
         " Perfect :                  ",
         " Seed    :                  ",
         "                            ",
+    ]
+    VERT_BAR = [
+        "╤",
+        "│",
+        "│",
+        "│",
+        "│",
+        "│",
+        "│",
+        "╧",
     ]
 
 
@@ -98,6 +116,14 @@ class Elements:
         "┌─┐ ╵ │ ",
         "╵ ├─╴ ╵ ",
         "╴ │ ┌─┬─",
+    ]
+    TATADATAAA = [
+        "╺┳╸┏━┓🎶╺┳╸┏━┓╺┳┓┏━┓",
+        " ┃ ┣━┫ ━ ┃ ┣━┫ ┃┃┣━┫",
+        " ╹ ╹ ╹   ╹ ╹ ╹╺┻┛╹ ╹",
+        " 🎵╺┳╸┏━┓┏━┓┏━┓ ╻ 🎶",
+        "🎶  ┃ ┣━┫┣━┫┣━┫ ╹   ",
+        "    ╹ ╹ ╹╹ ╹╹ ╹ ╹🎵 ",
     ]
 
 
@@ -136,4 +162,44 @@ class FortyTwoBrick:
         "▀█████",
         "  ▀███",
         "    ▀█",
+    ]
+
+
+class Endgame:
+    FRAME = [
+        "╔════════════════════════════════════════════════════════════════════════╗",  # noqa E501
+        "║                                              Your moves    :           ║",  # noqa E501
+        "║                                              Shortest path :           ║",  # noqa E501
+        "║                                              Efficiency    :           ║",  # noqa E501
+        "║   [R] Retry same maze   [E] Create new maze    [G] Back   [ESC] Quit   ║",  # noqa E501
+        "╚════════════════════════════════════════════════════════════════════════╝",  # noqa E501
+    ]
+    TEXT = [
+        "                                              Your moves    :           ",  # noqa E501
+        "                                              Shortest path :           ",  # noqa E501
+        "                                              Efficiency    :           ",  # noqa E501
+        "   [R] Retry same maze   [E] Create new maze    [G] Back   [ESC] Quit   ",  # noqa E501
+    ]
+    BUTTONS = [
+        "    R                     E                      G          ESC         ",  # noqa E501
+    ]
+    AMAZING = [
+        "            ┏━┓┏┳┓┏━┓╺━┓╻┏┓╻┏━╸  ╻            ",
+        "            ┣━┫┃┃┃┣━┫┏━┛┃┃┗┫┃╺┓  ╹            ",
+        "            ╹ ╹╹ ╹╹ ╹┗━╸╹╹ ╹┗━┛  ╹            ",
+    ]
+    WELL_DONE = [
+        "         ╻ ╻┏━╸╻  ╻   ╺┳┓┏━┓┏┓╻┏━╸  ╻         ",
+        "         ┃╻┃┣╸ ┃  ┃    ┃┃┃ ┃┃┗┫┣╸   ╹         ",
+        "         ┗┻┛┗━╸┗━╸┗━╸ ╺┻┛┗━┛╹ ╹┗━╸  ╹         ",
+    ]
+    NOT_BAD = [
+        "             ┏┓╻┏━┓╺┳╸  ┏┓ ┏━┓╺┳┓             ",
+        "             ┃┗┫┃ ┃ ┃   ┣┻┓┣━┫ ┃┃             ",
+        "             ╹ ╹┗━┛ ╹   ┗━┛╹ ╹╺┻┛             ",
+    ]
+    LOST = [
+        "  ╻ ╻┏━╸┏━┓┏━╸  ╻ ╻┏━┓╻ ╻  ╻  ┏━┓┏━┓╺┳╸  ┏━┓  ",
+        "  ┃╻┃┣╸ ┣┳┛┣╸   ┗┳┛┃ ┃┃ ┃  ┃  ┃ ┃┗━┓ ┃    ╺┛  ",
+        "  ┗┻┛┗━╸╹┗╸┗━╸   ╹ ┗━┛┗━┛  ┗━╸┗━┛┗━┛ ╹    ╹   ",
     ]

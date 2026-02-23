@@ -22,7 +22,7 @@ class FortyTwo:
         "   F F   ",
         "   F FFF ",
         "         ",
-        "          ",
+        "         ",
     ]
     MEDIUM_ALT = [
         "         ",

@@ -7,12 +7,14 @@ Classes:
     BasicView: Text-based maze renderer
 """
 
-from typing import Optional
+from typing import Optional, Deque, Tuple
 from mazegen.cell.cell import Cell
 from mazegen.maze.maze import Maze
 from view.utils.Colors import ColorsTty
 from model import ConfigModel
 from ..View import View
+
+Event = Tuple[str, object | None]
 
 
 class BasicView(View):
@@ -34,7 +36,8 @@ class BasicView(View):
 
     def render(self, maze: Maze, speed: int, algo: str,
                seed: Optional[str] = "",
-               count_as_step: Optional[int] = 1) -> None:
+               count_as_step: Optional[int] = 1,
+               key: str | None = None) -> None:
         """Render the maze to terminal output.
 
         Displays the maze grid, current speed, active cell position,
@@ -74,6 +77,9 @@ class BasicView(View):
             return
 
         self.__active_color = self.__color_list[new_index]
+
+    def set_event_queue(self, q: Deque[Event]) -> None:
+        self._events = q
 
     def view_cell(self, cell: Cell) -> str:
         """Generate ASCII art representation of a single cell.

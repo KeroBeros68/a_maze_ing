@@ -66,7 +66,10 @@ class Stamp:
     def add_stamp(self) -> None:
         x, y, bsq_size = self.stamp_bsq()
         if self.__logo_type == "vanilla":
-            logo = FortyTwo.VANILLA
+            if bsq_size >= len(FortyTwo.VANILLA):
+                logo = FortyTwo.VANILLA
+            else:
+                logo = FortyTwo.SMALL
         else:
             if bsq_size >= len(FortyTwo.LARGE):
                 logo = FortyTwo.LARGE

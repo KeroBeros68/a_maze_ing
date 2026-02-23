@@ -1,15 +1,15 @@
 # Maze width (number of cells)
 #WIDTH=31
-WIDTH=41
+WIDTH=21
 # Maze height
 #HEIGHT=15
-HEIGHT=21
+HEIGHT=9
 # Entry coordinates (x,y)
 #ENTRY=[1, 1]
 ENTRY=[1, 1]
 # Exit coordinates (x,y)
 #EXIT=[29, 13]
-EXIT=[39, 19]
+EXIT=[19,8]
 # Output filename
 OUTPUT_FILE=maze.txt
 # Is the maze perfect?
@@ -17,10 +17,10 @@ PERFECT=true
 # Maze generation algorithm ("backtracking" or "prim")
 ALGORITHM=backtracking
 # Seed
-SEED=78e4bd69978f4aef911039edc306f16b
+#SEED=78e4bd69978f4aef911039edc306f16b
 # Display "basic", "tty"
 DISPLAY_MODE=tty
-# Generation mode: 'normal' (returns final maze) or 'animated' (generator)
+# Generation mode: 'static' (returns final maze) or 'animated' (generator)
 MODE_GEN=animated
 # Logo type: 'vanilla' or 'custom'
 LOGO_TYPE=custom

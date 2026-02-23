@@ -35,7 +35,10 @@ SRC_MYPY = a_maze_ing.py \
 	   view/basic/BasicView.py \
 	   view/tty/TtyView.py \
 	   view/tty/TtyConsts.py \
-	   view/tty/TtyUtils.py
+	   view/tty/TtyUtils.py \
+	   view/tty/TtyAnims.py \
+	   view/tty/TtyLight.py \
+	   view/tty/TtyGame.py
 
 # **************************************************************************** #
 #									Rules									   #
@@ -99,7 +102,7 @@ lint-strict:
 clean:
 	printf "$(CYAN)Suppression de __pycache__...$(RESET) "
 	if [ -d "__pycache__" ]; then \
-		rm -r -f __pycache__ && \
+		rm -rf __pycache__ && \
 		echo "$(GREEN)✓ Dossier __pycache__ supprimés$(RESET)"; \
 	else \
 		echo "$(YELLOW)⚠ Rien à nettoyer$(RESET)"; \

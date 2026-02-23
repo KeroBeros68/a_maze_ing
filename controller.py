@@ -8,12 +8,14 @@ Classes:
     and user interaction
 """
 
+from collections import deque
+from typing import Deque, Tuple, Optional
 import time
 import sys
 from mazegen.MazeGenerator import MazeGenerator
 from keycontrol import KeyControl, TerminalManager
 from mazegen.maze.maze import Maze
-from pathfinder.pathfinder import PathFinder
+from mazegen.pathfinder.pathfinder import PathFinder
 from model import ConfigModel
 from view import ViewFactory
 from view.basic import BasicView  # noqa F401
@@ -26,6 +28,8 @@ TIME_PAUSE = 0.05
 BASE_FPS = 30
 MAX_FPS = 120
 MIN_FPS = 1
+
+Event = Tuple[str, Optional[object]]
 
 
 class Controller:
@@ -56,6 +60,7 @@ class Controller:
         self.__display_name = config.DISPLAY_MODE
         self.__algorithm = config.ALGORITHM
         self.__pause = False
+        self._events: Deque[Event] = deque()
         self.__restart = False  # to remove later
 
     def process(self) -> None:
@@ -63,16 +68,29 @@ class Controller:
         try:
             self.__display = ViewFactory.create(self.__display_name,
                                                 self.__config)
+            self.__display.set_event_queue(self._events)
         except ValueError as e:
             sys.stderr.write(f"Error: {e}\n")
             raise
         self.__control.start()
         print("\33[48;2;0;0;0m\33[2J")
+        self.pathfinder = PathFinder()
         self.generate_and_display_maze()
         self.solve_path()
         while True:
+            self.drain_events()
             self.key_control()
             time.sleep(0.01)
+
+    def drain_events(self) -> None:
+        while self._events:
+            name, payload = self._events.popleft()
+            if name == "REGEN_SEED":
+                self.__generator.generate_new_seed()
+                self.__maze.gen_step = 0
+                self.__restart = True
+                self.generate_and_display_maze()
+                self.pathfinder.solve_shortest_path(self.__maze)
 
     def key_control(self) -> None:
         """Handle keyboard input for maze control.
@@ -97,7 +115,7 @@ class Controller:
                 self.__restart = True
                 self.generate_and_display_maze()
                 self.pathfinder.solve_shortest_path(self.__maze)
-            if key in ("p", "P", " "):
+            if key in ("p", "P", " ") and self.__maze.gen_step != 9:
                 self.__pause = not self.__pause
                 if self.__pause:
                     self.__display.paused = True
@@ -117,15 +135,31 @@ class Controller:
                 self.__change_color(-1)
             if key in ("V", "v"):
                 self.__change_color(1)
-            if (key in ("F", "f")
-               and self.__maze.gen_step >= 3
-               and self.__maze.gen_step != 4):
-                self.__maze.gen_step = 4
+            if (key in ("F", "f") and 9 > self.__maze.gen_step >= 3):
+                if self.__maze.gen_step == 4 or self.__maze.gen_step == 5:
+                    self.__maze.gen_step = 6
+                else:
+                    self.__maze.gen_step = 4
                 self.__display.render(self.__maze, self.__animation_speed,
                                       self.__algorithm,
                                       self.__generator.get_seed(),
                                       count_as_step=0)
-            elif key in ("\x1b", "q", "Q"):  # Escape
+            if (key in ("G", "g") and self.__maze.gen_step >= 3):
+                if self.__maze.gen_step != 9:
+                    self.__maze.gen_step = 9
+                else:
+                    self.__maze.gen_step = 3
+                self.__display.render(self.__maze, self.__animation_speed,
+                                      self.__algorithm,
+                                      self.__generator.get_seed(),
+                                      count_as_step=0, key=None)
+            if (key in ("W", "w", "A", "a", "S", "s", "D", "d", "Z", "z",
+                        "Q", "q") and self.__maze.gen_step == 9):
+                self.__display.render(self.__maze, self.__animation_speed,
+                                      self.__algorithm,
+                                      self.__generator.get_seed(),
+                                      count_as_step=0, key=key.capitalize())
+            if key in ("\x1b"):  # Escape
                 if self.__config.DISPLAY_MODE != "tty":
                     print("\nProgram stopped.")
                 self.__control.stop()
@@ -189,7 +223,6 @@ class Controller:
                               self.__generator.get_seed(), count_as_step=0)
 
     def solve_path(self) -> None:
-        self.pathfinder = PathFinder()
         self.pathfinder.solve_shortest_path(self.__maze)
 
     def __enter__(self) -> "Controller":

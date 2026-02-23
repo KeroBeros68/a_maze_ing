@@ -1,7 +1,9 @@
 from dataclasses import dataclass
-from typing import List, Iterable
+from typing import List, Iterable, Tuple
 import unicodedata
 import sys
+from view.tty.TtyView import TtyView
+from mazegen.maze.maze import Maze
 from view.tty.TtyConsts import Colors, Banners, Elements, FortyTwoBrick
 
 
@@ -9,17 +11,22 @@ from view.tty.TtyConsts import Colors, Banners, Elements, FortyTwoBrick
 class CanvasCell:
     ch: str = " "
     color: str = ""
-    cont: bool = False
+    lit: float = 0
+    utf_cont: bool = False
 
 
 class Canvas:
     def __init__(
             self,
+            view: TtyView,
             width: int,
             height: int,
             color_theme: int,
-            default: CanvasCell | None = None
+            maze: Maze,
+            default: CanvasCell | None = None,
             ) -> None:
+        self.view = view
+        self.__maze = maze
         self.width = width
         self.height = height
         self.color_theme = color_theme
@@ -52,18 +59,22 @@ class Canvas:
         return 1
 
     def set_canvas_cell(self, x: int, y: int, ch: str,
-                        color: str = "") -> None:
+                        color: str | None = None) -> None:
         self._grid[y][x].ch = ch
-        self._grid[y][x].color = color
-        self._grid[y][x].cont = False
+        if color is not None:
+            self._grid[y][x].color = color
+        self._grid[y][x].utf_cont = False
         char_width = self.utfchar_len(ch)
         if char_width == 2 and x + 1 < self.width:
             self._grid[y][x + 1].ch = ""
-            self._grid[y][x + 1].color = ""
-            self._grid[y][x + 1].cont = True
+            if color is not None:
+                self._grid[y][x + 1].color = ""
+            self._grid[y][x + 1].utf_cont = True
 
-    def color_canvas_cell(self, x: int, y: int, color: str = "") -> None:
-        self._grid[y][x].color = color
+    def color_canvas_cell(self, x: int, y: int,
+                          color: str | None = None) -> None:
+        if color is not None:
+            self._grid[y][x].color = color
 
     def color_canvas_block(self, x1: int, y1: int, x2: int, y2: int,
                            color: str = "") -> None:
@@ -80,7 +91,8 @@ class Canvas:
             for x in range(self.width):
                 row[x].ch = ch
                 row[x].color = color
-                row[x].cont = False
+                row[x].lit = 0
+                row[x].utf_cont = False
 
     def measure_block(self, block: str | Iterable[str]) -> tuple[int, int]:
         if isinstance(block, str):
@@ -150,7 +162,7 @@ class Canvas:
                 x: int,
                 y: int,
                 block: str | Iterable[str],
-                color: str = "",
+                color: str | None = None,
                 transparent: bool = False,
                 transparent_chars: set[str] | None = None,
             ) -> None:
@@ -183,7 +195,7 @@ class Canvas:
                     break
 
     def add_maze_locked_cell(self, x: int, y: int, lock_code: str) -> None:
-        ansi = self.color_wall_ground(0, bright=True)
+        ansi: str = str(self.color_wall_ground(0, bright=True))
         if lock_code == "Y":
             self.add_block(x, y, FortyTwoBrick.Y, ansi)
         elif lock_code == "F":
@@ -201,8 +213,8 @@ class Canvas:
 
     def add_maze_cell(self, x: int, y: int, cell: str) -> None:
         code = int(cell, 16)
-        ansi = self.color_wall_ground(0)
-        ansi_closed = self.color_wall_ground(-1)
+        ansi: str = str(self.color_wall_ground(0))
+        ansi_closed: str = str(self.color_wall_ground(-1))
         if code == 15:
             self.add_block(x, y, Elements.CLOSED_CELL, ansi_closed)
             return
@@ -222,15 +234,17 @@ class Canvas:
             for cy in range(3):
                 self.add_block(x, y + cy, "█", ansi)
 
-    def color_wall_ground(self, lit: int, inv: bool = False,
-                          bright: bool = False) -> str:
+    def color_wall_ground_raw(
+         self,
+         lit: int | float) -> Tuple[int, int, int, int, int, int]:
         r, g, b = 96, 48, 24
+        gr, gg, gb = 0, 0, 0
         if self.color_theme == 1:
             r, g, b = 96, 48, 24
             self.color_theme_name = "Cave"
         elif self.color_theme == 2:
             r, g, b = 16, 64, 32
-            self.color_theme_name = "Forest"
+            self.color_theme_name = "PipBoy"
         elif self.color_theme == 3:
             r, g, b = 16, 32, 96
             self.color_theme_name = "DeepBlue"
@@ -255,22 +269,29 @@ class Canvas:
         dr = max(0, min(255, dr))
         dg = max(0, min(255, dg))
         db = max(0, min(255, db))
-        gr = "\33[48;2;0;0;0m"
-        if lit == 1:
-            gr = "\33[48;2;16;16;16m"
-        if lit == 2:
-            gr = "\33[48;2;32;32;32m"
-        if lit == 4:
-            gr = "\33[48;2;64;64;64m"
+        dgr = int(gr + (16 * lit))
+        dgg = int(gg + (16 * lit))
+        dgb = int(gb + (16 * lit))
+        dgr = max(0, min(255, dgr))
+        dgg = max(0, min(255, dgg))
+        dgb = max(0, min(255, dgb))
+        return dr, dg, db, dgr, dgg, dgb
+
+    def color_wall_ground(self, lit: int | float, inv: bool = False,
+                          bright: bool = False,
+                          ) -> str:
+        dr, dg, db, dgr, dgg, dgb = self.color_wall_ground_raw(lit)
         if inv is True:
-            ansi = f"\33[38;2;0;0;0m\33[48;2;{dr};{dg};{db}m"
+            ansi = (f"\33[38;2;{dgr};{dgg};{dgb}m"
+                    f"\33[48;2;{dr};{dg};{db}m")
         if bright is True:
             br = min(255, dr * 2)
             bg = min(255, dg * 2)
             bb = min(255, db * 2)
             ansi = f"\33[38;2;{br};{bg};{bb}m\33[48;2;{dr};{dg};{db}m"
         else:
-            ansi = f"\33[38;2;{dr};{dg};{db}m{gr}"
+            ansi = (f"\33[38;2;{dr};{dg};{db}m"
+                    f"\33[48;2;{dgr};{dgg};{dgb}m")
         return ansi
 
     def render_canvas(self, reset_each_cell: bool = False) -> str:
@@ -281,7 +302,7 @@ class Canvas:
                 rows_in_line = []
                 for x in range(self.width):
                     cell = self._grid[y][x]
-                    if cell.cont:
+                    if cell.utf_cont:
                         continue
                     if cell.color:
                         rows_in_line.append(cell.color)
@@ -297,7 +318,7 @@ class Canvas:
             rows_in_line = []
             for x in range(self.width):
                 cell = self._grid[y][x]
-                if cell.cont:
+                if cell.utf_cont:
                     continue
                 c = cell.color
                 if c and c != current_color:

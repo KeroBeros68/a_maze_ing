@@ -32,7 +32,7 @@ class UnPerfect(MazeAlgorithm):
             width = maze.width
             height = maze.height
 
-            targets = int(math.sqrt(width * height)) * 3
+            targets = int(math.sqrt(width * height))
             removed = 0
             candidates = []
 
