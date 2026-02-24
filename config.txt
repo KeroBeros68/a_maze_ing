@@ -18,5 +18,5 @@ SEED=BENJAMINCESTLEGOAT
 DISPLAY_MODE=tty
 # Generation mode: 'static' (returns final maze) or 'animated' (generator)
 MODE_GEN=static
-# Stamp design type: "42vanilla", "ok", "42custom"
+# Stamp design type: "42vanilla", "42custom"
 STAMP_TYPE=42custom
