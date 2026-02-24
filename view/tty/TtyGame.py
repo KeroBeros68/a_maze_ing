@@ -12,10 +12,7 @@ from view.tty.TtyUtils import Canvas
 from view.tty.TtyView import TtyView
 from view.tty.TtyLight import Light
 from mazegen.maze.maze import Maze
-from typing import Tuple, Optional
 import time
-
-Event = Tuple[str, object | None]
 
 
 class Game:

@@ -89,6 +89,7 @@ class ConfigModel(BaseSettings):
         - Entry and exit coordinates are non-negative
         - Entry and exit coordinates are different
         - Coordinates are within maze bounds (width and height)
+        - Entry and exit are on the external border of the maze
 
         Returns:
             ConfigModel: The validated configuration model
@@ -106,7 +107,7 @@ class ConfigModel(BaseSettings):
         # Check they are different
         if self.ENTRY == self.EXIT:
             raise ValueError(
-                "Exit coordinates cannot be " "the same as Entry coordinates"
+                "Exit coordinates cannot be the same as Entry coordinates"
             )
 
         # Check they are within bounds

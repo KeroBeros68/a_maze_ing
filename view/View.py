@@ -9,7 +9,7 @@ Classes:
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from mazegen.maze.maze import Maze
 from view.utils.Colors import ColorsTty

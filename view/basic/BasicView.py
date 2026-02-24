@@ -7,14 +7,12 @@ Classes:
     BasicView: Text-based maze renderer
 """
 
-from typing import Optional, Tuple
+from typing import Optional
 from mazegen.cell.cell import Cell
 from mazegen.maze.maze import Maze
 from view.utils.Colors import ColorsTty
 from mazegen.model import ConfigModel
 from ..View import View
-
-Event = Tuple[str, object | None]
 
 
 class BasicView(View):

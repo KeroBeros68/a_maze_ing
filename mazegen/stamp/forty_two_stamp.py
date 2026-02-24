@@ -59,9 +59,9 @@ class FortyTwoCustomStamp(StampDesign):
             List[str]: Logo as a list of strings
         """
         # For custom, skip vanilla and use SMALL, MEDIUM, LARGE
-        if size <= 1:
+        if size <= len(FortyTwo.SMALL):
             return FortyTwo.SMALL
-        elif size <= 17:
+        elif size <= len(FortyTwo.MEDIUM):
             return FortyTwo.MEDIUM
         else:
             return FortyTwo.LARGE
@@ -70,6 +70,6 @@ class FortyTwoCustomStamp(StampDesign):
         """Get available logo sizes.
 
         Returns:
-            List[int]: Sorted list of available sizes (1, 18)
+            List[int]: Sorted list of available sizes (1, 9, 18)
         """
-        return [1, 18]
+        return [len(FortyTwo.SMALL), len(FortyTwo.MEDIUM), len(FortyTwo.LARGE)]

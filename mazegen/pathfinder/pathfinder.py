@@ -4,8 +4,27 @@ from mazegen.maze.maze import Maze
 
 
 class PathFinder:
+    """Solver for finding the shortest path through a maze.
+
+    Uses a Breadth-First Search (BFS) algorithm to find the shortest
+    path from the maze entry to its exit, then stores the result as
+    a sequence of cardinal directions (N, E, S, W) in the maze.
+    """
 
     def solve_shortest_path(self, maze: Maze) -> None:
+        """Find and store the shortest path from entry to exit.
+
+        Runs BFS from maze.entry to maze.exit, reconstructing the path
+        by backtracking through visited nodes. The result is stored as
+        a string of directions (N/E/S/W) in maze.shortest_path.
+        Locked cells (stamp pattern) are treated as impassable.
+
+        Args:
+            maze: The Maze instance to solve. Must have entry and exit set.
+
+        Returns:
+            None. Result is written directly to maze.shortest_path.
+        """
         start = maze.entry
         goal = maze.exit
 
