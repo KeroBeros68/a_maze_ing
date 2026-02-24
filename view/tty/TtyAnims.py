@@ -1,3 +1,12 @@
+"""Animation rendering for TTY maze display.
+
+This module handles visual animations for maze generation including digger
+animation, firewall propagation, and other dynamic visual effects.
+
+Classes:
+    Anims: Manages animations for TTY maze visualization
+"""
+
 from view.tty.TtyUtils import Canvas
 from view.tty.TtyView import TtyView
 from view.tty.TtyLight import Light
@@ -9,8 +18,23 @@ import random
 
 
 class Anims:
+    """Animation effects for maze generation visualization.
+
+    Handles visual representation of maze generation process including
+    the digger animation, firewall propagation, and other dynamic effects.
+    """
+
     def __init__(self, view: TtyView, grid: Canvas, light: Light, maze: Maze,
                  viewmode: int) -> None:
+        """Initialize the animation system.
+
+        Args:
+            view: TtyView instance
+            grid: Canvas for rendering
+            light: Light effects handler
+            maze: The Maze object being animated
+            viewmode: Display mode identifier
+        """
         self.view = view
         self.grid = grid
         self.light = light

@@ -13,7 +13,7 @@ from typing import List, Optional, Deque, Tuple
 
 from mazegen.maze.maze import Maze
 from view.utils.Colors import ColorsTty
-from model import ConfigModel
+from mazegen.model import ConfigModel
 
 Event = Tuple[str, object | None]
 

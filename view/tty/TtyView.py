@@ -1,6 +1,16 @@
+"""TTY (teletypewriter) maze visualization with advanced rendering.
+
+This module provides an advanced terminal-based maze visualization using
+ANSI escape codes with multiple display modes, animations, lighting effects,
+and interactive gameplay.
+
+Classes:
+    TtyView: Advanced TTY-based maze visualization
+"""
+
 from mazegen.maze.maze import Maze
 from view.tty.TtyConsts import Colors, Banners, Panels, Elements
-from model import ConfigModel
+from mazegen.model import ConfigModel
 from ..View import View
 from typing import Deque, Tuple, Optional, Iterable
 import sys
@@ -10,8 +20,15 @@ Event = Tuple[str, Optional[object]]
 
 
 class TtyView(View):
+    """Advanced TTY-based maze visualization with rendering effects.
+
+    Provides animated maze generation display, lighting effects, and
+    interactive game mode with keyboard controls. Manages canvas rendering,
+    animations, and UI elements.
+    """
 
     def __init__(self, config: ConfigModel) -> None:
+        """Initialize the TTY view with configuration settings."""
         self.__config = config
         sys.stdout.write("\33[H\33[?25l\33[1m\n")
         self.frame_count = 0
@@ -43,6 +60,17 @@ class TtyView(View):
 
     def init_values(self, maze: Maze, speed: int, algo: str,
                     seed: Optional[str] = "") -> None:
+        """Initialize values for maze rendering and display.
+
+        Sets up the canvas, grid, lighting, animations, and game components
+        based on the maze configuration and display mode.
+
+        Args:
+            maze: The Maze object to render
+            speed: Animation speed in frames per second
+            algo: Maze generation algorithm name
+            seed: Random seed used for maze generation
+        """
         self.__width = maze.width
         self.__height = maze.height
         self.__entry = maze.entry
@@ -87,9 +115,22 @@ class TtyView(View):
         self.ansi_theme = f"\33[38;2;{r};{g};{b}m\33[48;2;0;0;0m"
 
     def set_event_queue(self, q: Deque[Event]) -> None:
+        """Set the event queue for handling keyboard input.
+
+        Args:
+            q: Deque containing keyboard events
+        """
         self._events = q
 
     def measure_block(self, block: str | Iterable[str]) -> tuple[int, int]:
+        """Measure the dimensions of a text block.
+
+        Args:
+            block: String or iterable of strings to measure
+
+        Returns:
+            Tuple[int, int]: (width, height) of the block
+        """
         if isinstance(block, str):
             lines = block.splitlines()
         else:

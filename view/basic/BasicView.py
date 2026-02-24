@@ -11,7 +11,7 @@ from typing import Optional, Deque, Tuple
 from mazegen.cell.cell import Cell
 from mazegen.maze.maze import Maze
 from view.utils.Colors import ColorsTty
-from model import ConfigModel
+from mazegen.model import ConfigModel
 from ..View import View
 
 Event = Tuple[str, object | None]
@@ -79,6 +79,11 @@ class BasicView(View):
         self.__active_color = self.__color_list[new_index]
 
     def set_event_queue(self, q: Deque[Event]) -> None:
+        """Set the event queue for handling keyboard input.
+
+        Args:
+            q: Deque containing keyboard events
+        """
         self._events = q
 
     def view_cell(self, cell: Cell) -> str:

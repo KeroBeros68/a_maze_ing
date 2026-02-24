@@ -33,7 +33,7 @@ check_env = EnvCheck(module_list)
 check_env.check_process()
 
 from pydantic import ValidationError  # noqa: E402
-from model import ConfigModel  # noqa: E402
+from mazegen.model import ConfigModel  # noqa: E402
 from controller import Controller  # noqa: E402
 
 
@@ -48,7 +48,12 @@ except ValidationError as e:
         sys.stderr.write(f"Type: {error['type']}\n")
     sys.exit(1)
 
-control = Controller(config)
+
+try:
+    control = Controller(config)
+except Exception as e:
+    print("error:", {e}, file=sys.stderr)
+    sys.exit(1)
 
 try:
     with control as c:

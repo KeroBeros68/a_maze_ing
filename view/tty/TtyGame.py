@@ -1,3 +1,12 @@
+"""Interactive game mode for maze traversal.
+
+This module implements interactive gameplay where users navigate a character
+through the generated maze to reach the exit point.
+
+Classes:
+    Game: Handles maze game mechanics and player movement
+"""
+
 from view.tty.TtyConsts import Endgame, Elements, Colors
 from view.tty.TtyUtils import Canvas
 from view.tty.TtyView import TtyView
@@ -10,8 +19,23 @@ Event = Tuple[str, object | None]
 
 
 class Game:
+    """Interactive maze game with player movement and lighting.
+
+    Allows users to navigate through the maze using keyboard controls,
+    with dynamic lighting effects and collision detection.
+    """
+
     def __init__(self, view: TtyView, grid: Canvas, light: Light,
                  maze: Maze, events: Optional[Deque[Event]] = None) -> None:
+        """Initialize the game with maze and rendering components.
+
+        Args:
+            view: TtyView instance
+            grid: Canvas for rendering
+            light: Light effects handler
+            maze: The Maze object to play in
+            events: Optional event queue for keyboard input
+        """
         self.view = view
         self.grid = grid
         self.light = light

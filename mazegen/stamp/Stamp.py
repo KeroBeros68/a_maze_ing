@@ -1,20 +1,62 @@
+"""Logo stamping system for maze generation.
+
+This module provides functionality to embed logos and stamps into generated
+mazes using a largest-square-fitting algorithm to determine optimal placement
+and size. Supports multiple logo types through the StampFactory pattern.
+
+Classes:
+    Stamp: Manages logo placement and embedding in mazes using StampDesign
+"""
+
 from typing import Iterable, Tuple, List
 from mazegen.maze.maze import Maze
-from mazegen.stamp.StampConsts import FortyTwo
+from mazegen.stamp.stamp_factory import StampFactory
 import random
 
 
 class Stamp:
+    """Manages logo and stamp placement in maze grids.
+
+    This class handles locating the largest square in a maze where a logo
+    can be placed without colliding with generated passages, then embeds
+    the selected logo at an optimal position. Uses the StampFactory to
+    support multiple stamp designs.
+
+    Attributes:
+        __maze: The Maze object to stamp
+        __design: The StampDesign instance to use for logos
+    """
+
     def __init__(self, maze: Maze, logo_type: str) -> None:
+        """Initialize the Stamp with a maze and logo type.
+
+        Args:
+            maze: The Maze object to stamp
+            logo_type: Logo type identifier (e.g., "42", "vanilla", "custom")
+
+        Raises:
+            ValueError: If logo_type is not registered with StampFactory
+        """
         self.__maze = maze
-        self.__logo_type = logo_type
+        self.__design = StampFactory.create(logo_type)
 
     def add_stamp_block(
-                self,
-                x: int,
-                y: int,
-                block: str | Iterable[str],
-            ) -> None:
+        self,
+        x: int,
+        y: int,
+        block: str | Iterable[str],
+    ) -> None:
+        """Add a text block stamp to the maze grid.
+
+        Marks cells as locked with the stamp content to prevent wall removal
+        during maze generation. Non-space characters in the block are treated
+        as locked cells.
+
+        Args:
+            x: Starting X coordinate for the stamp
+            y: Starting Y coordinate for the stamp
+            block: Text block or iterable of strings representing the stamp
+        """
         if isinstance(block, str):
             lines = block.splitlines()
         else:
@@ -31,6 +73,17 @@ class Stamp:
                 gx += 1
 
     def stamp_bsq(self) -> Tuple[int, int, int]:
+        """Find the largest square available for stamp placement.
+
+        Uses dynamic programming to find the largest square region in the maze
+        where a logo can be placed without overlapping entry/exit points or
+        existing locked cells.
+
+        Returns:
+            Tuple[int, int, int]: (x, y, size) coordinates and size of the
+                                 largest available square, or (0, 0, 0) if
+                                 no suitable space found.
+        """
         xdim = self.__maze.width
         ydim = self.__maze.height
         xin, yin = self.__maze.entry
@@ -64,23 +117,30 @@ class Stamp:
         return best[idx]
 
     def add_stamp(self) -> None:
+        """Embed a logo into the maze at the optimal location.
+
+        Finds the largest available square in the maze, uses the StampDesign
+        to select an appropriate logo size based on available space, and
+        randomly positions the logo within that space while keeping it away
+        from entry/exit points.
+        """
         x, y, bsq_size = self.stamp_bsq()
-        if self.__logo_type == "vanilla":
-            if bsq_size >= len(FortyTwo.VANILLA):
-                logo = FortyTwo.VANILLA
-            else:
-                logo = FortyTwo.SMALL
-        else:
-            if bsq_size >= len(FortyTwo.LARGE):
-                logo = FortyTwo.LARGE
-            elif bsq_size >= len(FortyTwo.MEDIUM):
-                logo = FortyTwo.MEDIUM
-            else:
-                logo = FortyTwo.SMALL
+        if bsq_size == 0:
+            return
+
+        # Use the stamp design to select the best logo
+        logo = self.__design.select_best_logo(bsq_size)
+        if not logo:
+            return
+
         logo_size = len(logo)
         diff_size = bsq_size - logo_size + 1
-        x_var = random.randrange(diff_size)
-        y_var = random.randrange(diff_size)
+        if diff_size > 0:
+            x_var = random.randrange(diff_size)
+            y_var = random.randrange(diff_size)
+        else:
+            x_var = 0
+            y_var = 0
         self.add_stamp_block(x + x_var, y + y_var, logo)
 
 

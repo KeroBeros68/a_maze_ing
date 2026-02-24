@@ -8,10 +8,11 @@ through the algorithm factory pattern.
 import random
 import uuid
 from sys import stderr
-from typing import Tuple, Optional, Generator
+from typing import Generator
 from mazegen.maze.maze import Maze
 from mazegen.stamp.Stamp import Stamp
 from mazegen.algorithms.factory import AlgorithmFactory
+from mazegen.model import ConfigModel
 
 
 class MazeGenerator:
@@ -33,48 +34,29 @@ class MazeGenerator:
         maze: The generated Maze object
     """
 
-    def __init__(
-        self,
-        width: int,
-        height: int,
-        entry: Tuple[int, int],
-        exit: Tuple[int, int],
-        output_file: str,
-        seed: Optional[str],
-        algorithm: str,
-        perfect: bool,
-        mode_gen: str,
-        logo_type: str,
-    ):
-        """Initialize MazeGenerator with configuration parameters.
+    def __init__(self, config: ConfigModel):
+        """Initialize MazeGenerator with configuration.
 
         Args:
-            width: Width of the maze
-            height: Height of the maze
-            entry: Entry coordinates as tuple (x, y)
-            exit: Exit coordinates as tuple (x, y)
-            output_file: Path to the output file
-            seed: Random seed for reproducible generation (None for random)
-            algorithm: Name of the algorithm to use (default: "backtracking")
-            mode_gen: Generation mode ("normal" or "animated")
+            config: ConfigModel instance with all maze generation settings
 
         Raises:
             ValueError: If the specified algorithm is not registered
         """
-        self.__width = width
-        self.__height = height
-        self.__entry = entry
-        self.__exit = exit
-        self.__output_file = output_file
-        self.__seed = seed
-        self.__algorithm_name = algorithm
-        self.__perfect = perfect
-        self.__mode_gen = mode_gen
-        self.__logo_type = logo_type
+        self.__width = config.WIDTH
+        self.__height = config.HEIGHT
+        self.__entry = config.ENTRY
+        self.__exit = config.EXIT
+        self.__output_file = config.OUTPUT_FILE
+        self.__seed = config.SEED
+        self.__algorithm_name = config.ALGORITHM
+        self.__perfect = config.PERFECT
+        self.__mode_gen = config.MODE_GEN
+        self.__stamp_type = config.STAMP_TYPE
         self.maze: Maze = Maze(
             self.__width, self.__height, self.__entry, self.__exit,
             self.__perfect)
-        self.stamp: Stamp = Stamp(self.maze, self.__logo_type)
+        self.stamp: Stamp = Stamp(self.maze, self.__stamp_type)
 
     def generate_maze(self) -> Generator[Maze, None, None]:
         """Generate a maze using the configured algorithm.

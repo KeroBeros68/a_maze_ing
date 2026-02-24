@@ -25,12 +25,21 @@ class AlgorithmFactory:
     def _init_algorithms(cls) -> None:
         """Lazy load algorithms to avoid circular imports."""
         if not cls.__algorithms:
-            from mazegen.algorithms.backtracking import BacktrackingAlgorithm
-            from mazegen.algorithms.prim import PrimAlgorithm
-            cls.__algorithms = {
-                "backtracking": BacktrackingAlgorithm,
-                "prim": PrimAlgorithm,
-            }
+            try:
+                from mazegen.algorithms.backtracking import BacktrackingAlgorithm
+                from mazegen.algorithms.prim import PrimAlgorithm
+                cls.__algorithms = {
+                    "backtracking": BacktrackingAlgorithm,
+                    "prim": PrimAlgorithm,
+                }
+            except ImportError as e:
+                raise RuntimeError(
+                    f"Failed to initialize algorithms: {e}"
+                ) from e
+            except Exception as e:
+                raise RuntimeError(
+                    f"Unexpected error during algorithm initialization: {e}"
+                ) from e
 
     @classmethod
     def create(cls, algorithm_name: str) -> MazeAlgorithm:

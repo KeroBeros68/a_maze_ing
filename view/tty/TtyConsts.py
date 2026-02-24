@@ -1,5 +1,22 @@
+"""TTY display constants and assets for maze visualization.
+
+This module contains all display constants for the TTY (teletypewriter) view,
+including color codes, banner art, UI panels, and animation elements.
+
+Classes:
+    Colors: ANSI color codes with RGB background
+    Banners: ASCII art banners and signatures
+    Panels: UI panel text and content
+    Elements: Animation and display elements
+"""
+
+
 class Colors:
-    BLACK = "\33[30m\33[48;2;0;0;0m"
+    """ANSI color codes for TTY display with black background.
+
+    Defines color constants used in TTY view with RGB background set to black
+    for consistent maze visualization.
+    """
     RED = "\33[31m\33[48;2;0;0;0m"
     GREEN = "\33[32m\33[48;2;0;0;0m"
     BROWN = "\33[33m\33[48;2;0;0;0m"

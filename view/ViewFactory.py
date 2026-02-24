@@ -9,7 +9,7 @@ Classes:
 """
 
 from view.View import View
-from model import ConfigModel
+from mazegen.model import ConfigModel
 
 
 class ViewFactory:

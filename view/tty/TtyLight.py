@@ -1,3 +1,13 @@
+"""Lighting effects system for TTY maze visualization.
+
+This module provides advanced lighting calculations to create realistic
+lighting effects that propagate through the maze, creating atmosphere and
+visual depth.
+
+Classes:
+    Light: Manages lighting calculations and effects
+"""
+
 from view.tty.TtyView import TtyView
 from view.tty.TtyUtils import Canvas
 from mazegen.maze.maze import Maze
@@ -6,7 +16,20 @@ import heapq
 
 
 class Light:
+    """Lighting effects and propagation for maze visualization.
+
+    Calculates and applies lighting based on distance and maze structure,
+    creating dynamic lighting effects that respond to game events.
+    """
+
     def __init__(self, view: TtyView, grid: Canvas, maze: Maze) -> None:
+        """Initialize the lighting system.
+
+        Args:
+            view: TtyView instance
+            grid: Canvas for applying light effects
+            maze: The Maze object for light propagation
+        """
         self.view = view
         self.grid = grid
         self.__maze = maze

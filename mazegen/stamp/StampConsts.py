@@ -1,4 +1,20 @@
+"""Logo constants for maze stamping.
+
+This module contains the ASCII art logos and stamp designs that can be
+embedded into generated mazes.
+
+Classes:
+    FortyTwo: Collection of ASCII art logo designs
+"""
+
+
 class FortyTwo:
+    """ASCII art logos for maze stamping.
+
+    Contains multiple logo designs in different sizes for placement within
+    the maze structure. Logos are represented as text blocks with specific
+    characters marking locked cells.
+    """
     VANILLA = [
         "         ",
         "         ",

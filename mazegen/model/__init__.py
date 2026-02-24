@@ -1,5 +1,6 @@
 """Model module for maze generation configuration."""
 
-from model.Model import ConfigModel
+from mazegen.model.Model import ConfigModel
 
 __all__ = ["ConfigModel"]
+

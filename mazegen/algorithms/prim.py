@@ -1,3 +1,12 @@
+"""Prim's algorithm implementation for maze generation.
+
+This module implements Prim's algorithm for generating perfect mazes.
+It uses a frontier set approach to grow the maze from a starting point.
+
+Classes:
+    PrimAlgorithm: Implementation of Prim's maze generation algorithm
+"""
+
 import random
 from typing import Generator
 from mazegen.maze.maze import Maze
@@ -6,10 +15,28 @@ from mazegen.algorithms.unperfect import UnPerfect
 
 
 class PrimAlgorithm(MazeAlgorithm):
+    """Prim's algorithm implementation for maze generation.
+
+    Uses a frontier-set approach to progressively expand the maze by
+    connecting unvisited cells to the existing maze structure.
+    Creates perfect mazes with guaranteed solution paths.
+    """
 
     def generate(
         self, maze: Maze, entry_x: int, entry_y: int, animate: bool = False
     ) -> Generator[Maze, None, None]:
+        """Generate a maze using Prim's algorithm.
+
+        Args:
+            maze: Maze object to generate
+            entry_x: Starting X coordinate
+            entry_y: Starting Y coordinate
+            animate: If True, yields maze state at each step.
+                    If False, yields only the final completed maze.
+
+        Returns:
+            Generator yielding Maze states at each step.
+        """
 
         def in_bounds(x: int, y: int) -> bool:
             return 0 <= x < maze.width and 0 <= y < maze.height

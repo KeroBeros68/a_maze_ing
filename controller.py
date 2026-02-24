@@ -16,7 +16,7 @@ from mazegen.MazeGenerator import MazeGenerator
 from keycontrol import KeyControl, TerminalManager
 from mazegen.maze.maze import Maze
 from mazegen.pathfinder.pathfinder import PathFinder
-from model import ConfigModel
+from mazegen.model import ConfigModel
 from view import ViewFactory
 from view.basic import BasicView  # noqa F401
 from view.tty import TtyView  # noqa F401
@@ -37,24 +37,19 @@ class Controller:
     Controls the maze generation and user interaction.
 
     Uses KeyControl for non-blocking keyboard input via select().
+    Manages the complete lifecycle of maze generation, display, and user input.
     """
 
     def __init__(self, config: ConfigModel):
+        """Initialize the controller with configuration.
+
+        Args:
+            config: ConfigModel with all maze generation settings
+        """
         self.__config: ConfigModel = config
         self.__terminal_manager: TerminalManager = TerminalManager()
         self.__control: KeyControl = KeyControl(self.__terminal_manager)
-        self.__generator: MazeGenerator = MazeGenerator(
-            config.WIDTH,
-            config.HEIGHT,
-            config.ENTRY,
-            config.EXIT,
-            config.OUTPUT_FILE,
-            config.SEED,
-            config.ALGORITHM,
-            config.PERFECT,
-            config.MODE_GEN,
-            config.LOGO_TYPE,
-        )
+        self.__generator: MazeGenerator = MazeGenerator(config)
         self.__animation_speed = BASE_FPS
         self.__display: View = TtyView(self.__config)
         self.__display_name = config.DISPLAY_MODE
@@ -64,7 +59,12 @@ class Controller:
         self.__restart = False  # to remove later
 
     def process(self) -> None:
-        """Start listening to keyboard input via non-blocking poll."""
+        """Start the main event loop for maze generation and display.
+
+        Initializes the display, starts keyboard input monitoring, generates
+        the initial maze, solves it, and enters the main event loop for
+        handling user input.
+        """
         try:
             self.__display = ViewFactory.create(self.__display_name,
                                                 self.__config)
@@ -83,6 +83,7 @@ class Controller:
             time.sleep(0.01)
 
     def drain_events(self) -> None:
+        """Process and handle all queued keyboard events."""
         while self._events:
             name, payload = self._events.popleft()
             if name == "REGEN_SEED":
@@ -205,24 +206,30 @@ class Controller:
             time.sleep(0.01)
 
     def __more_speed(self) -> None:
-        """Increase animation speed (up to MAX_FPS)."""
+        """Increase animation speed up to maximum FPS."""
         if self.__animation_speed == MAX_FPS:
             return
         self.__animation_speed += 1
 
     def __less_speed(self) -> None:
-        """Decrease animation speed (down to MIN_FPS)."""
+        """Decrease animation speed down to minimum FPS."""
         if self.__animation_speed == MIN_FPS:
             return
         self.__animation_speed -= 1
 
     def __change_color(self, value: int) -> None:
+        """Change the maze display color.
+
+        Args:
+            value: -1 for previous color, 1 for next color
+        """
         self.__display.change_color(value)
         self.__display.render(self.__maze, self.__animation_speed,
                               self.__algorithm,
                               self.__generator.get_seed(), count_as_step=0)
 
     def solve_path(self) -> None:
+        """Find and store the shortest path through the maze."""
         self.pathfinder.solve_shortest_path(self.__maze)
 
     def __enter__(self) -> "Controller":

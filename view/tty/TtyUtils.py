@@ -1,3 +1,13 @@
+"""Canvas and rendering utilities for TTY display.
+
+This module provides the Canvas class which manages a 2D grid of displayable
+characters with color and lighting information for TTY-based maze rendering.
+
+Classes:
+    CanvasCell: Data class for individual canvas cells
+    Canvas: 2D grid manager for TTY rendering
+"""
+
 from dataclasses import dataclass
 from typing import List, Iterable, Tuple
 import unicodedata
@@ -9,6 +19,14 @@ from view.tty.TtyConsts import Colors, Banners, Elements, FortyTwoBrick
 
 @dataclass(slots=True)
 class CanvasCell:
+    """A single cell in the display canvas.
+
+    Attributes:
+        ch: Character to display
+        color: ANSI color code
+        lit: Lighting value (0.0 to 1.0)
+        utf_cont: Whether character is UTF-8 continuation
+    """
     ch: str = " "
     color: str = ""
     lit: float = 0
@@ -16,6 +34,12 @@ class CanvasCell:
 
 
 class Canvas:
+    """2D grid manager for TTY maze rendering with color and lighting.
+
+    Manages a 2D grid of CanvasCell objects, handles UTF-8 rendering,
+    color codes, and lighting effects for maze visualization.
+    """
+
     def __init__(
             self,
             view: TtyView,
@@ -25,6 +49,16 @@ class Canvas:
             maze: Maze,
             default: CanvasCell | None = None,
             ) -> None:
+        """Initialize the Canvas.
+
+        Args:
+            view: TtyView instance
+            width: Canvas width in characters
+            height: Canvas height in characters
+            color_theme: Color theme identifier
+            maze: The Maze object for reference
+            default: Default CanvasCell for initialization
+        """
         self.view = view
         self.__maze = maze
         self.width = width
