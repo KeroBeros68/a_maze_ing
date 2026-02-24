@@ -16,15 +16,14 @@ class FortyTwo:
     characters marking locked cells.
     """
     VANILLA = [
-        "         ",
-        "         ",
-        " F   FFF ",
-        " F     F ",
-        " FFF FFF ",
-        "   F F   ",
-        "   F FFF ",
-        "         ",
-        "         ",
+        "        ",
+        "        ",
+        "F   FFF ",
+        "F     F ",
+        "FFF FFF ",
+        "  F F   ",
+        "  F FFF ",
+        "        ",
     ]
     SMALL = [
         "Y",

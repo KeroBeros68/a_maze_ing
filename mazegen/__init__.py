@@ -8,9 +8,11 @@ Modules:
     cell: Individual cell representation with wall management
     maze: Complete maze grid structure
     utils: Utility enumerations for walls and directions
+    error: Exception classes for the mazegen package
 """
 
 from . import utils, cell, algorithms
+from .error import MazeError, StampError
 
 
-__all__ = ["utils", "cell", "algorithms"]
+__all__ = ["utils", "cell", "algorithms", "MazeError", "StampError"]

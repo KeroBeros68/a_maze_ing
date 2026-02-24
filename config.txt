@@ -1,11 +1,11 @@
 # Maze width (number of cells)
-WIDTH=30
+WIDTH=9
 # Maze height
-HEIGHT=18
+HEIGHT=9
 # Entry coordinates (x,y)
-ENTRY=[1, 1]
+ENTRY=[0, 0]
 # Exit coordinates (x,y)
-EXIT=[2,2]
+EXIT=[4,4]
 # Output filename
 OUTPUT_FILE=maze.txt
 # Is the maze perfect?
@@ -19,4 +19,4 @@ DISPLAY_MODE=tty
 # Generation mode: 'static' (returns final maze) or 'animated' (generator)
 MODE_GEN=static
 # Stamp design type: "42vanilla", "42custom"
-STAMP_TYPE=42custom
+STAMP_TYPE=42vanilla

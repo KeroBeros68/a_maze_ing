@@ -9,6 +9,7 @@ import random
 import uuid
 from sys import stderr
 from typing import Generator
+from mazegen.error.MazeError import StampError
 from mazegen.maze.maze import Maze
 from mazegen.stamp.Stamp import Stamp
 from mazegen.algorithms.factory import AlgorithmFactory
@@ -76,7 +77,10 @@ class MazeGenerator:
         if self.__seed is None:
             self.generate_new_seed()
         random.seed(self.__seed)
-        self.stamp.add_stamp()
+        try:
+            self.stamp.add_stamp()
+        except Exception:
+            raise StampError()
 
         # Get algorithm from factory
         try:

@@ -121,3 +121,17 @@ class ConfigModel(BaseSettings):
             )
 
         return self
+
+    @model_validator(mode="after")
+    def validate_maze_size_for_stamp(self) -> "ConfigModel":
+
+        x = self.WIDTH
+        y = self.HEIGHT
+        stamp = self.STAMP_TYPE
+
+        if stamp == "42vanilla" and (x < 9 or y < 9):
+            raise ValueError(
+                "Maze too small for that stamp"
+            )
+
+        return self
