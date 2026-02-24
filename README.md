@@ -1,37 +1,42 @@
-*This project has been created as part of the 42 curriculum by kebertra.*
+*This project has been created as part of the 42 curriculum by kebertra, orobert.*
 
-# A-Maze-ing
+# A-Maze-ing 🧩🌀
 
-## Description
+## Description 📌
 
-A-Maze-ing is a procedural maze generator written in Python 3.13. It generates random mazes from a configuration file, renders them visually in the terminal, and writes the result — including the shortest path — to an output file in hexadecimal format.
+A-Maze-ing is a procedural maze generator written in **Python 3.13+**. It generates random mazes from a configuration file, renders them in the terminal (basic ASCII or advanced TTY mode), and writes the result — including the **shortest path** — to an output file in **hexadecimal** format.
 
-The project features:
-- Two generation algorithms: **Recursive Backtracking (DFS)** and **Prim's algorithm**
-- Support for **perfect mazes** (single path between entry and exit) and **imperfect mazes** (multiple paths)
-- Embedded **"42" logo** carved directly into the maze structure
-- **Animated generation** with live terminal rendering
-- **Interactive TTY mode**: show/hide path, change colors, control speed, play through the maze
-- A fully reusable `mazegen` module, ready to be packaged and installed via pip
+The project also includes a reusable library, **`mazegen`**, designed to be imported and extended independently from the UI/rendering layer.
+
+### Features (Advanced) ✨
+
+- 🧠 Multiple algorithms: **Recursive Backtracking (DFS)** and **Prim’s algorithm**
+- ✅ **Perfect** mazes (single unique path) and 🔁 **Imperfect** mazes (loops)
+- 🏷️ Embedded **"42"** logo carved into the maze structure via a stamp system
+- 🎞️ **Static** or **Animated** generation
+- 🖥️ Two display modes:
+  - `basic`: simple ASCII rendering
+  - `tty`: advanced rendering with ANSI colors + interactivity (speed, colors, path toggle, game mode)
+- 🧭 Shortest-path extraction and export (written to the output file)
 
 ---
 
-## Instructions
+## Instructions 🛠️
 
-### Requirements
+### Requirements 📦
 
-- Python 3.13 or higher
-- [Poetry](https://python-poetry.org/) (recommended) or pip
+- 🐍 Python **3.13+**
+- 📜 [Poetry](https://python-poetry.org/) (recommended) or `pip`
 
-### Installation
+### Installation ⬇️
 
 ```bash
 make install
 ```
 
-This sets up a virtual environment and installs all dependencies via Poetry.
+This creates a virtual environment and installs dependencies (via Poetry).
 
-### Running
+### Run ▶️
 
 ```bash
 make run
@@ -43,20 +48,20 @@ Or directly:
 python3 a_maze_ing.py config.txt
 ```
 
-### Debug mode
+### Debug mode 🐛
 
 ```bash
 make debug
 ```
 
-### Linting
+### Linting ✅
 
 ```bash
-make lint         # flake8 + mypy (standard flags)
+make lint         # flake8 + mypy
 make lint-strict  # flake8 + mypy --strict
 ```
 
-### Cleanup
+### Cleanup 🧹
 
 ```bash
 make clean
@@ -64,40 +69,42 @@ make clean
 
 ---
 
-## Configuration File Format
+## Configuration file ⚙️
 
-The program takes a single argument: the path to a configuration file.
+The program takes **one argument**: the path to a configuration file.
 
-```
+```bash
 python3 a_maze_ing.py config.txt
 ```
 
-**Mandatory keys:**
-
-| Key           | Description                              | Example              |
-|---------------|------------------------------------------|----------------------|
-| `WIDTH`       | Maze width in cells                      | `WIDTH=60`           |
-| `HEIGHT`      | Maze height in cells                     | `HEIGHT=25`          |
-| `ENTRY`       | Entry coordinates (x, y)                | `ENTRY=[1, 1]`       |
-| `EXIT`        | Exit coordinates (x, y)                 | `EXIT=[59, 24]`      |
-| `OUTPUT_FILE` | Output filename                          | `OUTPUT_FILE=maze.txt` |
-| `PERFECT`     | Generate a perfect maze (true/false)     | `PERFECT=true`       |
-
-**Optional keys:**
-
-| Key            | Description                                            | Default         |
-|----------------|--------------------------------------------------------|-----------------|
-| `ALGORITHM`    | Generation algorithm (`backtracking` or `prim`)        | `backtracking`  |
-| `SEED`         | Reproducibility seed (any string)                      | Random          |
-| `MODE_GEN`     | Generation mode (`static` or `animated`)               | `static`        |
-| `DISPLAY_MODE` | Display mode (`basic` or `tty`)                        | `basic`         |
-| `STAMP_TYPE`   | Logo stamp to embed (`42vanilla` or `42custom`)        | `42vanilla`     |
-
 Lines starting with `#` are treated as comments and ignored.
 
-**Example `config.txt`:**
+### Complete config structure 🧾
 
-```
+#### Mandatory keys (required) 🔒
+
+| Key           | Type              | Description                           | Example                |
+|---------------|-------------------|---------------------------------------|------------------------|
+| `WIDTH`       | integer           | Maze width in cells                   | `WIDTH=60`             |
+| `HEIGHT`      | integer           | Maze height in cells                  | `HEIGHT=25`            |
+| `ENTRY`       | `[x, y]` integers | Entry coordinates (x, y)              | `ENTRY=[1, 1]`         |
+| `EXIT`        | `[x, y]` integers | Exit coordinates (x, y)               | `EXIT=[59, 24]`        |
+| `OUTPUT_FILE` | string            | Output filename                       | `OUTPUT_FILE=maze.txt` |
+| `PERFECT`     | boolean           | `true` for perfect, `false` for loops | `PERFECT=true`         |
+
+#### Optional keys (advanced) 🧰
+
+| Key            | Type   | Description                                            | Default        |
+|----------------|--------|--------------------------------------------------------|----------------|
+| `ALGORITHM`    | string | Generation algorithm: `backtracking` or `prim`         | `backtracking` |
+| `SEED`         | string | Seed for reproducible generation                       | random         |
+| `MODE_GEN`     | string | `static` or `animated`                                 | `static`       |
+| `DISPLAY_MODE` | string | `basic` or `tty`                                       | `basic`        |
+| `STAMP_TYPE`   | string | Logo stamp: `42vanilla` or `42custom`                  | `42vanilla`    |
+
+### Example `config.txt` 🧪
+
+```ini
 WIDTH=60
 HEIGHT=25
 ENTRY=[1, 1]
@@ -113,9 +120,40 @@ STAMP_TYPE=42vanilla
 
 ---
 
-## Output File Format
+## Maze generation algorithms 🧬
 
-Each cell is encoded as one hexadecimal digit representing its closed walls:
+This project supports **two** classic procedural maze-generation algorithms.
+
+### Recursive Backtracking (DFS) 🕳️➡️
+
+**What it is:**  
+A randomized depth-first search that carves passages by walking through unvisited cells and backtracking when stuck.
+
+**Why we chose it:**  
+- 👍 Simple and reliable
+- ✅ Great fit for **perfect mazes** (one unique solution)
+- 🎞️ Very easy to animate step-by-step
+
+### Prim’s algorithm 🌿
+
+**What it is:**  
+A randomized Prim-like approach that grows the maze from a visited region by selecting random frontier cells and connecting them back to the visited area.
+
+**Why we chose it:**  
+- 🌍 Produces more evenly distributed mazes (different “feel” vs DFS)
+- 🎮 Good visual and gameplay contrast with DFS
+- 🧱 Often yields a more “open” structure
+
+### Perfect vs Imperfect 🔁
+
+- ✅ `PERFECT=true`: the maze has a **single unique path** between entry and exit.
+- 🔁 `PERFECT=false`: the generator starts from a perfect maze, then removes additional walls to introduce **loops** (multiple possible routes).
+
+---
+
+## Output file format 🧾
+
+Each cell is encoded as **one hexadecimal digit** representing which walls are closed.
 
 | Bit | Direction |
 |-----|-----------|
@@ -124,9 +162,9 @@ Each cell is encoded as one hexadecimal digit representing its closed walls:
 | 2       | South |
 | 3       | West  |
 
-The file is structured as follows:
+File structure:
 
-```
+```text
 <hex grid, one row per line>
 
 <entry x,y>
@@ -136,59 +174,37 @@ The file is structured as follows:
 
 ---
 
-## Visual Representation & User Interactions
+## Display modes & interactions 🖥️🎛️
 
-### Basic mode (`DISPLAY_MODE=basic`)
+### Basic mode (`DISPLAY_MODE=basic`) 🟦
 Simple ASCII rendering of the maze.
 
-### TTY mode (`DISPLAY_MODE=tty`)
+### TTY mode (`DISPLAY_MODE=tty`) 🌈
 Advanced terminal rendering with ANSI colors, lighting effects, and full interactivity.
 
-**Key bindings (TTY mode):**
+#### Key bindings (TTY mode) ⌨️
 
-| Key       | Action                                      |
-|-----------|---------------------------------------------|
-| `R`       | Regenerate maze with new random seed        |
-| `E`       | Regenerate maze with new computed seed      |
-| `F`       | Show / Hide shortest path                   |
-| `C` / `V` | Cycle wall colors                           |
+| Key         | Action                                    |
+|-------------|-------------------------------------------|
+| `R`         | Regenerate with a new random seed         |
+| `E`         | Regenerate with a newly computed seed     |
+| `F`         | Show / Hide shortest path                 |
+| `C` / `V`   | Cycle wall colors                         |
 | `P` / Space | Pause / Resume animation                  |
-| `+` / `-` | Increase / Decrease animation speed         |
-| `G`       | Toggle interactive game mode                |
-| `W/A/S/D` | Move player through the maze (game mode)   |
-| `ESC`     | Quit                                        |
+| `+` / `-`   | Increase / Decrease animation speed       |
+| `G`         | Toggle interactive game mode              |
+| `W/A/S/D`   | Move player (game mode)                   |
+| `ESC`       | Quit                                      |
 
 ---
 
-## Algorithm Choice
+## Reusability: the `mazegen` module ♻️
 
-### Recursive Backtracking (DFS)
+The reusable part of this project is the **`mazegen`** package. It is designed to be independent from rendering (view layer) and can be imported in other Python projects.
 
-A depth-first search algorithm that carves passages by pushing/popping cells on a stack. It creates mazes with long, winding corridors and a single solution path when run in perfect mode.
+- Documentation (internal link): **[`mazegen/README.md`](./mazegen/README.md)**
 
-**Why:** Simple to implement, reliably produces perfect mazes, easy to animate step by step.
-
-### Prim's Algorithm
-
-A minimum spanning tree approach using a frontier set. It picks random frontier cells and connects them to the visited area. Produces more "open" mazes with shorter, wider corridors.
-
-**Why:** Produces better distributed mazes (more balanced than DFS), good contrast for visual comparison.
-
-Both algorithms support the **UnPerfect** pass: after generating a perfect maze, a configurable number of walls are removed to introduce loops (`PERFECT=false`).
-
----
-
-## Reusable Module: `mazegen`
-
-The `mazegen` package is a standalone maze generation module with no dependency on the view layer.
-
-### Installation
-
-```bash
-pip install mazegen-1.0.0-py3-none-any.whl
-```
-
-### Basic usage
+### Minimal example 🧪
 
 ```python
 from mazegen.model import ConfigModel
@@ -203,112 +219,97 @@ config = ConfigModel(
     PERFECT=True,
     ALGORITHM="prim",
     SEED="myseed",
-    STAMP_TYPE="42vanilla"
+    STAMP_TYPE="42vanilla",
 )
 
 generator = MazeGenerator(config)
 maze = generator.generate_maze()
 
-print(maze)                   # Hex grid as string
-print(maze.shortest_path)     # e.g. "EESSWWN..."
-```
-
-### Animated (generator-based)
-
-```python
-for partial_maze in generator.generate_maze_animated():
-    print(partial_maze)   # Each step of the generation
-```
-
-### Accessing the maze structure
-
-```python
-cell = maze.maze_grid[y][x]
-print(cell.view_cell())   # Hex digit for that cell
-print(cell.north)         # True if north wall is closed
-print(cell.is_entry)      # True if entry cell
-```
-
-### Custom algorithms
-
-```python
-from mazegen.algorithms.algorithm import MazeAlgorithm
-from mazegen.algorithms.factory import AlgorithmFactory
-
-class MyAlgorithm(MazeAlgorithm):
-    def generate(self, maze):
-        pass  # Implement here
-
-AlgorithmFactory.register("mine", MyAlgorithm)
-```
-
-### Custom stamps
-
-```python
-from mazegen.stamp.stamp_design import StampDesign
-from mazegen.stamp.stamp_factory import StampFactory
-
-class MyStamp(StampDesign):
-    def get_logo(self, size):
-        return ["XXX", "XXX", "XXX"]
-    def get_available_sizes(self):
-        return [3]
-
-StampFactory.register("mystamp", MyStamp)
-```
-
-### Building the package
-
-```bash
-poetry build
-# Generates mazegen-*.whl and mazegen-*.tar.gz in dist/
+print(maze)               # Hex grid as string
+print(maze.shortest_path) # e.g. "EESSWWN..."
 ```
 
 ---
 
-## Resources
+## Team & project management 👥📅
 
-- [Maze generation algorithms — Wikipedia](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
-- [Recursive Backtracker (DFS)](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_depth-first_search)
-- [Prim's algorithm](https://en.wikipedia.org/wiki/Prim%27s_algorithm)
-- [Pydantic documentation](https://docs.pydantic.dev/)
-- [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code)
-- [Python typing module](https://docs.python.org/3/library/typing.html)
+### Team 👤👤
 
-**AI usage:**
-GitHub Copilot (Claude Sonnet) was used during development for:
-- Generating and updating English docstrings across all files
-- Refactoring the Stamp class to a factory pattern
-- Migrating MazeGenerator from individual parameters to a single ConfigModel
-- Suggesting fixes for import paths after directory restructuring
-- Code reviews and feedback on architecture
+- **kebertra**
+- **orobert**
 
----
+### Roles 🧑‍💻
 
-## Team & Project Management
+**kebertra**
+- 🧭 Project lead
+- 🏗️ Architecture and core design
+- 🕳️ Recursive Backtracking (DFS) algorithm
+- 🔎 Code reviews
+- 🧼 Enforcing OOP standards and overall code quality
 
-**Team:** Solo project — kebertra (Kevin Bertrand)
+**orobert**
+- 🖥️ Rendering layer (basic + TTY)
+- 🌿 Prim’s algorithm
+- 🔁 Imperfect maze mode (loop creation)
+- 🎞️ Animated generation
+- 🏷️ Stamp system / patterns (logo embedding)
+- 🧭 Shortest path (mini BFS)
 
-**Roles:** Full-stack — architecture, generation algorithms, TTY view, configuration, packaging
+### Planning (expected vs actual) 🗺️
 
-**Planning evolution:**
-- Week 1: Core maze structure (Cell, Maze), backtracking algorithm, hex output
-- Week 2: Prim's algorithm, PERFECT flag, pathfinder (BFS), "42" stamp
-- Week 3: TTY view, animations, interactive controls, factory patterns
-- Week 4: Refactoring, Pydantic config, reusable mazegen module, documentation
+**Initial plan (high level):**
+1. 🧱 Implement maze data structures and hex output
+2. 🧠 Add one generation algorithm + shortest path
+3. 🔁 Add perfect/imperfect option + second algorithm
+4. 🖥️ Add terminal rendering (basic), then TTY interactions and animation
+5. ♻️ Refactor into a reusable library and finalize documentation
 
-**What worked well:**
-- Factory pattern for algorithms and stamps: easy to extend
-- Pydantic for configuration validation: catches errors early with clear messages
-- Generator-based animation: decouples rendering from generation cleanly
+**How it evolved:**
+- The project split naturally into **application** vs **reusable library** (`mazegen`)
+- TTY rendering and interactivity required extra iteration (ANSI quirks, key handling, animation smoothness)
+- Factory/pattern-based organization (algorithms/stamps) improved extensibility and maintainability
 
-**What could be improved:**
-- MLX graphical view was not implemented
-- Unit tests are absent (verified manually)
-- Border validation for entry/exit could be more explicit
+### What worked well ✅
 
-**Tools used:**
-- VS Code + GitHub Copilot (AI pair programming)
-- Poetry for dependency management and packaging
-- mypy + flake8 for static analysis
+- Separation between **generation** and **rendering**
+- Two algorithms with distinct maze “styles”
+- Pattern-based stamp system that can be extended
+- Generator-based animation that keeps rendering decoupled from core logic
+- Code reviews helped keep consistent OOP practices
+
+### What could be improved 🔧
+
+- Add unit tests (currently validated manually)
+- Add CI (lint/tests) to automate checks
+- Make entry/exit border validation more explicit
+- Add a graphical renderer (MLX) if required later
+
+### Tools used 🧰
+
 - Git for version control
+- VS Code
+- Poetry for dependency management and packaging
+- flake8 + mypy for static analysis
+- ANSI/TTY terminal features for rendering and interaction
+
+---
+
+## Resources 📚
+
+### Classic references 🔗
+
+- 🧭 Maze generation algorithms — Wikipedia: https://en.wikipedia.org/wiki/Maze_generation_algorithm
+- 🕳️ Randomized DFS (Recursive Backtracker): https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_depth-first_search
+- 🌿 Prim’s algorithm: https://en.wikipedia.org/wiki/Prim%27s_algorithm
+- 📘 Pydantic documentation: https://docs.pydantic.dev/
+- 🎨 ANSI escape codes: https://en.wikipedia.org/wiki/ANSI_escape_code
+- 🧩 Python typing module: https://docs.python.org/3/library/typing.html
+
+### AI usage (what, where, why) 🤖
+
+GitHub Copilot (Claude Sonnet) was used during development for:
+- 📝 Generating and updating English docstrings across the codebase
+- 🏭 Refactoring the stamp system into a factory-based architecture
+- 🧱 Migrating `MazeGenerator` from multiple parameters to a single `ConfigModel`
+- 🧰 Suggesting fixes for imports after directory restructuring
+- 🔎 Code review feedback and architecture suggestions
