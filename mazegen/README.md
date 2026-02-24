@@ -59,7 +59,7 @@ print(maze)
 - **EXIT** (tuple[int, int]): Exit point coordinates (x, y)
 - **OUTPUT_FILE** (str): Output filename for the maze
 - **ALGORITHM** (str): Algorithm to use ("backtracking" or "prim")
-- **STAMP_TYPE** (str): Logo stamp design ("42vanilla", "42custom", "21vanilla", "21custom")
+- **STAMP_TYPE** (str): Logo stamp design ("42vanilla" or "42custom", default: "42vanilla")
 - **PERFECT** (bool): Generate perfect maze without loops (default: True)
 - **MODE_GEN** (str): Generation mode ("static" or "animated", default: "static")
 - **DISPLAY_MODE** (str): Display mode ("basic", "tty", or "mlx", default: "basic")
@@ -121,8 +121,8 @@ StampFactory.register("custom", CustomStamp)
 ## Available Stamp Designs
 
 ### 42 Logo Variants
-- **42vanilla**: 42 logo in vanilla style only
-- **42custom**: 42 logo in custom style (excluding vanilla)
+- **42vanilla**: 42 logo using the built-in vanilla style
+- **42custom**: 42 logo using a custom user-defined style
 
 ## Available Algorithms
 
@@ -139,6 +139,8 @@ mazegen/
 │   ├── prim.py         # Prim's algorithm
 │   └── factory.py      # Algorithm factory
 ├── cell/               # Cell structure
+├── error/              # Exception classes
+│   └── MazeError.py    # MazeError and StampError
 ├── maze/               # Maze grid management
 ├── model/              # Configuration model (Pydantic)
 ├── pathfinder/         # Pathfinding utilities
@@ -152,11 +154,20 @@ mazegen/
 
 ## Error Handling
 
-Both factories (AlgorithmFactory and StampFactory) are secured with try/except blocks:
+The package exposes two exception classes for fine-grained error handling:
+
+- **`MazeError`**: Base exception for all mazegen errors
+- **`StampError`**: Raised for stamp-related failures (invalid dimensions, unsupported format, etc.)
 
 ```python
+from mazegen import MazeError, StampError
+
 try:
     generator = MazeGenerator(config)
+except StampError as e:
+    print(f"Stamp error: {e}")
+except MazeError as e:
+    print(f"Maze error: {e}")
 except RuntimeError as e:
     print(f"Failed to initialize: {e}")
 ```

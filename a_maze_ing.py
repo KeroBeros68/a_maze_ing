@@ -43,8 +43,8 @@ try:
 except ValidationError as e:
     for error in e.errors():
         field = error["loc"][0] if error["loc"] else "model"
-        sys.stderr.write(f"Field: {field}")
-        sys.stderr.write(f"Error: {error['msg']}")
+        sys.stderr.write(f"Field: {field}\n")
+        sys.stderr.write(f"Error: {error['msg']}\n")
         sys.stderr.write(f"Type: {error['type']}\n")
     sys.exit(1)
 

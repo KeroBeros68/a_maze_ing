@@ -28,17 +28,18 @@ class ConfigModel(BaseSettings):
     coordinates are consistent.
 
     Attributes:
-        WIDTH: Width of the maze (0-200)
-        HEIGHT: Height of the maze (0-200)
+        WIDTH: Width of the maze (2-200)
+        HEIGHT: Height of the maze (2-200)
         ENTRY: Entry point coordinates (x, y)
         EXIT: Exit point coordinates (x, y)
-        OUTPUT_FILE: Path to output file for generated maze
-        PERFECT: Whether to generate perfect maze (no loops)
-        ALGORITHM: Maze generation algorithm name
-        SEED: Random seed for reproducible generation
-        MODE_GEN: Generation mode ("normal" or "animated")
-        DISPLAY_MODE: Display mode ("basic", "tty", or "mlx")
-        STAMP_TYPE: Stamp design type ("42", "vanilla", "ok", "custom")
+        OUTPUT_FILE: Path to output file for generated maze (4-15 chars)
+        PERFECT: Whether to generate a perfect maze (no loops, default: True)
+        ALGORITHM: Maze generation algorithm name ("backtracking" or "prim")
+        SEED: Random seed for reproducible generation (optional, max 100 chars)
+        MODE_GEN: Generation mode ("static" or "animated", default: "static")
+        DISPLAY_MODE: Display mode ("basic", "tty", or "mlx", default: "basic")
+        STAMP_TYPE: Stamp design type ("42vanilla" or "42custom",
+                    default: "42vanilla")
     """
     model_config = SettingsConfigDict(env_file="config.txt")
 
@@ -124,7 +125,17 @@ class ConfigModel(BaseSettings):
 
     @model_validator(mode="after")
     def validate_maze_size_for_stamp(self) -> "ConfigModel":
+        """Validate that the maze is large enough to fit the selected stamp.
 
+        Ensures that the maze dimensions meet the minimum size requirements
+        for the chosen stamp design.
+
+        Returns:
+            ConfigModel: The validated configuration model
+
+        Raises:
+            ValueError: If the maze is too small for the selected stamp type
+        """
         x = self.WIDTH
         y = self.HEIGHT
         stamp = self.STAMP_TYPE

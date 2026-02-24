@@ -1,7 +1,7 @@
 # Maze width (number of cells)
-WIDTH=9
+WIDTH=8
 # Maze height
-HEIGHT=9
+HEIGHT=8
 # Entry coordinates (x,y)
 ENTRY=[0, 0]
 # Exit coordinates (x,y)
