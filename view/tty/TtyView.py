@@ -12,11 +12,9 @@ from mazegen.maze.maze import Maze
 from view.tty.TtyConsts import Colors, Banners, Panels, Elements
 from mazegen.model import ConfigModel
 from ..View import View
-from typing import Deque, Tuple, Optional, Iterable
+from typing import Tuple, Optional, Iterable
 import sys
 import time
-
-Event = Tuple[str, Optional[object]]
 
 
 class TtyView(View):
@@ -55,7 +53,6 @@ class TtyView(View):
         self.paused = False
         self.previously_done = 0
         self.gen_step = 0
-        self._events: Optional[Deque[Event]] = None
         self.ansi_theme = Colors.CYAN
 
     def init_values(self, maze: Maze, speed: int, algo: str,
@@ -106,21 +103,12 @@ class TtyView(View):
         self.anim = Anims(self, self.grid, self.light,
                           self.__maze, self.__view)
         from view.tty.TtyGame import Game
-        self.game = Game(self, self.grid, self.light, self.__maze,
-                         events=self._events)
+        self.game = Game(self, self.grid, self.light, self.__maze)
         r, g, b, _, _, _ = self.grid.color_wall_ground_raw(1)
         r = min(255, r * 2)
         g = min(255, g * 2)
         b = min(255, b * 2)
         self.ansi_theme = f"\33[38;2;{r};{g};{b}m\33[48;2;0;0;0m"
-
-    def set_event_queue(self, q: Deque[Event]) -> None:
-        """Set the event queue for handling keyboard input.
-
-        Args:
-            q: Deque containing keyboard events
-        """
-        self._events = q
 
     def measure_block(self, block: str | Iterable[str]) -> tuple[int, int]:
         """Measure the dimensions of a text block.

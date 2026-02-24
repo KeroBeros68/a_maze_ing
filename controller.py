@@ -8,8 +8,6 @@ Classes:
     and user interaction
 """
 
-from collections import deque
-from typing import Deque, Tuple, Optional
 import time
 import sys
 from mazegen.MazeGenerator import MazeGenerator
@@ -18,7 +16,6 @@ from mazegen.maze.maze import Maze
 from mazegen.pathfinder.pathfinder import PathFinder
 from mazegen.model import ConfigModel
 from view import ViewFactory
-from view.basic import BasicView  # noqa F401
 from view.tty import TtyView  # noqa F401
 from view.View import View
 
@@ -28,8 +25,6 @@ TIME_PAUSE = 0.05
 BASE_FPS = 30
 MAX_FPS = 120
 MIN_FPS = 1
-
-Event = Tuple[str, Optional[object]]
 
 
 class Controller:
@@ -55,7 +50,6 @@ class Controller:
         self.__display_name = config.DISPLAY_MODE
         self.__algorithm = config.ALGORITHM
         self.__pause = False
-        self._events: Deque[Event] = deque()
         self.__restart = False  # to remove later
 
     def process(self) -> None:
@@ -68,7 +62,6 @@ class Controller:
         try:
             self.__display = ViewFactory.create(self.__display_name,
                                                 self.__config)
-            self.__display.set_event_queue(self._events)
         except ValueError as e:
             sys.stderr.write(f"Error: {e}\n")
             raise
@@ -78,20 +71,8 @@ class Controller:
         self.generate_and_display_maze()
         self.solve_path()
         while True:
-            self.drain_events()
             self.key_control()
             time.sleep(0.01)
-
-    def drain_events(self) -> None:
-        """Process and handle all queued keyboard events."""
-        while self._events:
-            name, payload = self._events.popleft()
-            if name == "REGEN_SEED":
-                self.__generator.generate_new_seed()
-                self.__maze.gen_step = 0
-                self.__restart = True
-                self.generate_and_display_maze()
-                self.pathfinder.solve_shortest_path(self.__maze)
 
     def key_control(self) -> None:
         """Handle keyboard input for maze control.

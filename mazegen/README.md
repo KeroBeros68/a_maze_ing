@@ -184,6 +184,50 @@ StampFactory.register("mystamp", MyStamp)
 config.STAMP_TYPE = "mystamp"
 ```
 
+## Creating Custom Algorithms
+
+```python
+from mazegen.algorithms.algorithm import MazeAlgorithm
+from mazegen.algorithms.factory import AlgorithmFactory
+from mazegen.maze import Maze
+from mazegen.cell import Cell
+
+class MyAlgorithm(MazeAlgorithm):
+    def generate(self, maze: Maze) -> None:
+        """Implement your custom maze generation algorithm."""
+        # Your algorithm implementation here
+        pass
+
+# Register the custom algorithm
+AlgorithmFactory.register("myalgo", MyAlgorithm)
+
+# Use it in configuration
+config = ConfigModel(
+    WIDTH=60,
+    HEIGHT=25,
+    ENTRY=(1, 1),
+    EXIT=(59, 24),
+    OUTPUT_FILE="maze.txt",
+    ALGORITHM="myalgo"  # Use your custom algorithm
+)
+```
+
+## Extensibility
+
+Both `AlgorithmFactory` and `StampFactory` provide registration methods to easily extend the library:
+
+### AlgorithmFactory Methods
+
+- `create(algorithm_name)`: Create an algorithm instance by name
+- `register(name, algorithm_class)`: Register a custom algorithm
+- `get_available_algorithms()`: Get list of available algorithm names
+
+### StampFactory Methods
+
+- `create(design_name)`: Create a stamp design instance by name
+- `register(name, design_class)`: Register a custom stamp design
+- `get_available_designs()`: Get list of available stamp design names
+
 ## Configuration File (config.txt)
 
 The library can load configuration from a `config.txt` file:

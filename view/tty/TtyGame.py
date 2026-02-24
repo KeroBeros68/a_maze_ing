@@ -12,7 +12,7 @@ from view.tty.TtyUtils import Canvas
 from view.tty.TtyView import TtyView
 from view.tty.TtyLight import Light
 from mazegen.maze.maze import Maze
-from typing import Tuple, Deque, Optional
+from typing import Tuple, Optional
 import time
 
 Event = Tuple[str, object | None]
@@ -26,7 +26,7 @@ class Game:
     """
 
     def __init__(self, view: TtyView, grid: Canvas, light: Light,
-                 maze: Maze, events: Optional[Deque[Event]] = None) -> None:
+                 maze: Maze) -> None:
         """Initialize the game with maze and rendering components.
 
         Args:
@@ -40,7 +40,6 @@ class Game:
         self.grid = grid
         self.light = light
         self.__maze = maze
-        self._events = events
         self.x1 = self.view.xoffset
         self.y1 = self.view.yoffset
         self.x2 = self.__maze.width * 6 + self.x1

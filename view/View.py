@@ -9,13 +9,11 @@ Classes:
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Deque, Tuple
+from typing import List, Optional, Tuple
 
 from mazegen.maze.maze import Maze
 from view.utils.Colors import ColorsTty
 from mazegen.model import ConfigModel
-
-Event = Tuple[str, object | None]
 
 
 class View(ABC):
@@ -58,8 +56,4 @@ class View(ABC):
         Args:
             new_color: The new color value to apply
         """
-        pass
-
-    @abstractmethod
-    def set_event_queue(self, q: Deque[Event]) -> None:
         pass
