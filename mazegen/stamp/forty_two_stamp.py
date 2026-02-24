@@ -15,7 +15,7 @@ from mazegen.stamp.StampConsts import FortyTwo
 
 class FortyTwoVanillaStamp(StampDesign):
     """FortyTwo stamp design always in vanilla style.
-    
+
     Returns the vanilla logo regardless of requested size.
     """
 
@@ -43,7 +43,7 @@ class FortyTwoVanillaStamp(StampDesign):
 
 class FortyTwoCustomStamp(StampDesign):
     """FortyTwo stamp design with custom style.
-    
+
     Uses SMALL, MEDIUM, and LARGE sizes, excluding VANILLA.
     """
 

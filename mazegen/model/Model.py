@@ -67,10 +67,12 @@ class ConfigModel(BaseSettings):
         default="basic", description="Display mode (basic, tty, mlx)"
     )
     STAMP_TYPE: str = Field(
-        default="42vanilla", description="Stamp design type (42vanilla, 42custom)"
+        default="42vanilla",
+        description="Stamp design type (42vanilla, 42custom)"
     )
 
-    @field_validator("ALGORITHM", "MODE_GEN", "DISPLAY_MODE", "STAMP_TYPE", mode="before")
+    @field_validator("ALGORITHM", "MODE_GEN",
+                     "DISPLAY_MODE", "STAMP_TYPE", mode="before")
     @classmethod
     def lowercase_fields(cls, v: str) -> str:
         """Convert string fields to lowercase."""

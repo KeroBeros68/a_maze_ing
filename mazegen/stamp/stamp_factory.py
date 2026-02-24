@@ -14,7 +14,8 @@ class StampFactory:
     """Factory for creating stamp design instances.
 
     Provides a centralized way to instantiate stamp designs based on their
-    name, allowing new stamp designs to be added without modifying existing code.
+    name, allowing new stamp designs to be added without
+    modifying existing code.
 
     Class Attributes:
         __designs: Dictionary mapping design names to design classes

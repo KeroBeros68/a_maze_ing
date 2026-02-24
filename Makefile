@@ -29,7 +29,7 @@ SRC_MYPY = a_maze_ing.py \
 	   mazegen/stamp/Stamp.py \
 	   mazegen/stamp/StampConsts.py \
 	   mazegen/utils/utils.py \
-	   model/Model.py \
+	   mazegen/model/Model.py \
 	   view/View.py \
 	   view/ViewFactory.py \
 	   view/basic/BasicView.py \

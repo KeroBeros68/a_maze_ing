@@ -90,7 +90,7 @@ maze = Maze(width=60, height=25)
 
 ### AlgorithmFactory
 
-Factory for creating maze generation algorithms.
+Factory for creating maze generation algorithms and registering new algorithms..
 
 ```python
 from mazegen.algorithms.factory import AlgorithmFactory

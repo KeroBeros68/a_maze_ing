@@ -26,7 +26,9 @@ class AlgorithmFactory:
         """Lazy load algorithms to avoid circular imports."""
         if not cls.__algorithms:
             try:
-                from mazegen.algorithms.backtracking import BacktrackingAlgorithm
+                from mazegen.algorithms.backtracking import (
+                    BacktrackingAlgorithm,
+                )
                 from mazegen.algorithms.prim import PrimAlgorithm
                 cls.__algorithms = {
                     "backtracking": BacktrackingAlgorithm,

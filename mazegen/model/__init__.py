@@ -3,4 +3,3 @@
 from mazegen.model.Model import ConfigModel
 
 __all__ = ["ConfigModel"]
-
