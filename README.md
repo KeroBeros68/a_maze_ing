@@ -244,16 +244,18 @@ print(maze.shortest_path) # e.g. "EESSWWN..."
 - 🧭 Project lead
 - 🏗️ Architecture and core design
 - 🕳️ Recursive Backtracking (DFS) algorithm
+- 🖥️ Rendering layer (basic)
 - 🔎 Code reviews
 - 🧼 Enforcing OOP standards and overall code quality
 
 **orobert**
-- 🖥️ Rendering layer (basic + TTY)
+- 🖥️ Rendering layer (TTY)
 - 🌿 Prim’s algorithm
 - 🔁 Imperfect maze mode (loop creation)
 - 🎞️ Animated generation
 - 🏷️ Stamp system / patterns (logo embedding)
 - 🧭 Shortest path (mini BFS)
+- 🎮 Game Mode
 
 ### Planning (expected vs actual) 🗺️
 
@@ -281,8 +283,7 @@ print(maze.shortest_path) # e.g. "EESSWWN..."
 
 - Add unit tests (currently validated manually)
 - Add CI (lint/tests) to automate checks
-- Make entry/exit border validation more explicit
-- Add a graphical renderer (MLX) if required later
+- Add a graphical renderer (MLX)
 
 ### Tools used 🧰
 
@@ -298,7 +299,7 @@ print(maze.shortest_path) # e.g. "EESSWWN..."
 
 ### Classic references 🔗
 
-- 🧭 Maze generation algorithms — Wikipedia: https://en.wikipedia.org/wiki/Maze_generation_algorithm
+- 🧭 Maze generation algorithms — http://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap.html
 - 🕳️ Randomized DFS (Recursive Backtracker): https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_depth-first_search
 - 🌿 Prim’s algorithm: https://en.wikipedia.org/wiki/Prim%27s_algorithm
 - 📘 Pydantic documentation: https://docs.pydantic.dev/
